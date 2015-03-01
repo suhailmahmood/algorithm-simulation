@@ -3,35 +3,35 @@ import QtQuick 2.0
 Rectangle {
 	id: root
 
-	width: 100
-	height: 30
-	color: "steelblue"
+	color: "black"
+	focus: true
 	border {
 		color: "lightgray"
 		width: 1
 	}
+	property color hoverColor: "#777171"
+	property color pressedColor: Qt.darker(hoverColor)
+	property string text: buttonText.text= "Button"
+	property int textSize: buttonText.font.pointSize=8
 
-	focus: true
-
-	property string label: buttonText.text
 	signal clicked()
 
 	Text {
 		id: buttonText
 		anchors.centerIn: parent
 		color: "white"
-		text: label
-		font.pixelSize: 20
+		text: root.text
+		font.pointSize: root.textSize
 	}
 
 	MouseArea {
 		id: mouseArea
 		hoverEnabled: true
 		anchors.fill: parent
-		onEntered: color = Qt.lighter("blue")
-		onExited: color = "gray"
-		onPressed: color = "blue"
-		onReleased: color = Qt.lighter("blue")
+		onEntered: color = hoverColor
+		onExited: color = "black"
+		onPressed: color = pressedColor
+		onReleased: color = mouseArea.containsMouse ? hoverColor : color
 		onClicked: root.clicked()
 	}
 }

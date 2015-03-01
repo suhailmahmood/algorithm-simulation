@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import "../components"
+import "../scripts/script.js" as Functions
 
 Rectangle {
 	id: insertion
@@ -43,7 +44,7 @@ Rectangle {
 
 	TilesWrapper {
 		id: tilesRow
-		tileCount: 5
+		tileSizeArray: Functions.getNRandom(10)
 		anchors.verticalCenter: parent.verticalCenter
 	}
 

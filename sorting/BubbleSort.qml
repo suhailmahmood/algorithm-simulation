@@ -1,13 +1,13 @@
 import QtQuick 2.0
 import "../components"
+import "../scripts/script.js" as Functions
 
 Rectangle {
 	id: bubble
 
-	width: 892
-	height: 300
+	width: mainArea.width
+	height: mainArea.height+100
 	color: "#7185e8"
-	radius: 10
 
 	property int speed: 500	// minimum safe value is 120, more cause tiles to be misplaced
 	property int i
@@ -17,8 +17,51 @@ Rectangle {
 	property var element2
 	property int currentLine
 
+	Rectangle {
+		id: mainArea
+		anchors.centerIn: parent
+		width: 892
+		height: 300
+		color: "#ec7a0f"
+
+		TilesWrapper {
+			id: tilesRow
+			dataArray: Functions.getNRandom(10)
+			anchors.verticalCenter: parent.verticalCenter
+		}
+
+		PseudoCodeWrapper {
+			id: pseudoCode
+			anchors.left: tilesRow.right
+			anchors.verticalCenter: parent.verticalCenter
+			pseudocode: [
+				"for (i=1 to n-1)",
+				"  for (j=1 to n-i-1)",
+				"    if (array[j] > array[j+1])",
+				"      swap(array[j], array[j+1])"
+			]
+		}
+	}
+
+	Drawer {
+		id: drawerBubble
+		anchors.top: mainArea.bottom
+		anchors.left: parent.left
+		onDataInputChanged: {
+			tilesRow.dataArray = drawerBubble.dataInput
+			i = j = currentLine = 0
+			for(var p=0; p<3; p++)
+				start_pause.timers[p].stop()
+		}
+	}
+
+	Component.onCompleted: print(tileCount)
+
+	// 3 Timers and the MouseArea below
+
 	MouseArea {
-		anchors.fill: parent
+		id: start_pause
+		anchors.fill: mainArea
 		property var timers: [codeSelectTimer, sortTimer, sleeper]
 		property int runningTimer: -1
 		onClicked: {
@@ -42,24 +85,6 @@ Rectangle {
 				timers[runningTimer].start()
 			}
 		}
-	}
-
-	TilesWrapper {
-		id: tilesRow
-
-		anchors.verticalCenter: parent.verticalCenter
-	}
-
-	PseudoCodeWrapper {
-		id: pseudoCode
-		anchors.left: tilesRow.right
-		anchors.verticalCenter: parent.verticalCenter
-		pseudocode: [
-			"for (i=1 to n-1)",
-			"  for (j=1 to n-i-1)",
-			"    if (array[j] > array[j+1])",
-			"      swap(array[j], array[j+1])"
-		]
 	}
 
 	Timer {

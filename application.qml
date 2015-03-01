@@ -19,16 +19,13 @@ Window {
 		}
 	}
 
-
 	Loader {
 		id: loader
-		anchors.centerIn: parent
-//		asynchronous: true			// causes loading and compilation to run on background thread, results in smoother animation, if any
-//		visible: status == Loader.Ready
+		anchors.fill: parent
+		anchors.horizontalCenter: parent.horizontalCenter
+		asynchronous: true			// causes loading and compilation to run on background thread, results in smoother animation, if any
+		visible: status == Loader.Ready
 	}
-
-
-
 
 	PlasticButton {
 		id: exitButton
@@ -63,14 +60,13 @@ Window {
 		width: 400; height: 250
         radius: 30
 		color: "transparent"
-		border.width: 4; border.color: "white"
 
 		SideRect {
 			id: leftRect
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.left }
 			text: "BubbleSort"
 			onClicked: {
-				loader.setSource("sorting/BubbleSort.qml", { tileCount: 10 })
+				loader.setSource("sorting/BubbleSort.qml")
 				backButton.visible = true
 				choiceRing.visible = false
 			}
@@ -115,18 +111,16 @@ Window {
 
 			property string text
 
-            x: parent.width/2 - width/2; y: parent.height/2 - height/2
+			x: parent.width/2 - width/2; y: parent.height/2 - height/2
+			visible: false
 			width: 120; height: 50
 			radius: 6
-            border.width: 4; border.color: "white"
+			border.width: 4; border.color: "white"
 			color: "firebrick"
 
-			// Set an 'elastic' behavior on the focusRect's x property.
 			Behavior on x {
 				NumberAnimation { easing.type: Easing.OutElastic; easing.amplitude: 3.0; easing.period: 2.0; duration: 300 }
 			}
-
-			// Set an 'elastic' behavior on the focusRect's y property.
 			Behavior on y {
 				NumberAnimation { easing.type: Easing.OutElastic; easing.amplitude: 3.0; easing.period: 2.0; duration: 300 }
 			}
@@ -147,6 +141,7 @@ Window {
 					}
 				}
 			}
+			onTextChanged: visible = true
 		}
 	}
 }

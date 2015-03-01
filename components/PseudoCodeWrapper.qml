@@ -11,7 +11,7 @@ Rectangle {
 	function highlightLine(line) {
 		for(var i=0; i<repeater.count; i++) {
 			if(line === i) {
-				repeater.itemAt(i).color = "red"
+				repeater.itemAt(i).color = "white"
 			}
 			else {
 				repeater.itemAt(i).color = "black"

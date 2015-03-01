@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import "../components"
+import "../scripts/script.js" as Functions
 
 Rectangle {
 	id: selection
@@ -18,35 +19,11 @@ Rectangle {
 	property var element2
 	property int currentLine
 
-	MouseArea {
-		id: start_pause
-		anchors.fill: parent
-		property var timers: [outerLoopTimer, innerLoopTimer, lastSwapTimer, sleeper]
-		property int runningTimer: -1
-		onClicked: {
-			if (timers[0].running || timers[1].running || timers[2].running
-					|| timers[3].running) {
 
-				if (timers[0].running)
-					runningTimer = 0
-				else if (timers[1].running)
-					runningTimer = 1
-				else if (timers[2].running)
-					runningTimer = 2
-				else if (timers[3].running)
-					runningTimer = 3
-
-				timers[runningTimer].stop()
-			} else if (runningTimer === -1) {
-				outerLoopTimer.start()
-			} else {
-				timers[runningTimer].start()
-			}
-		}
-	}
 
 	TilesWrapper {
 		id: tilesRow
+		tileSizeArray: Functions.getNRandom(10)
 		anchors.verticalCenter: parent.verticalCenter
 	}
 
@@ -75,6 +52,37 @@ Rectangle {
 		y: 50
 		font.family: "consolas"
 		font.pixelSize: 30
+	}
+
+
+	// 4 Timers and 'start_pause' MouseArea below
+
+
+	MouseArea {
+		id: start_pause
+		anchors.fill: parent
+		property var timers: [outerLoopTimer, innerLoopTimer, lastSwapTimer, sleeper]
+		property int runningTimer: -1
+		onClicked: {
+			if (timers[0].running || timers[1].running || timers[2].running
+					|| timers[3].running) {
+
+				if (timers[0].running)
+					runningTimer = 0
+				else if (timers[1].running)
+					runningTimer = 1
+				else if (timers[2].running)
+					runningTimer = 2
+				else if (timers[3].running)
+					runningTimer = 3
+
+				timers[runningTimer].stop()
+			} else if (runningTimer === -1) {
+				outerLoopTimer.start()
+			} else {
+				timers[runningTimer].start()
+			}
+		}
 	}
 
 	Timer {

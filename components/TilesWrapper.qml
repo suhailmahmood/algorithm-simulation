@@ -6,8 +6,8 @@ Rectangle {
 	width: 552; height: 300
 	color: "transparent"
 
-	property int tileCount: repeater.model = 10
-	property alias repeater: repeater
+	property var dataArray: []
+	property int tileCount: dataArray.length
 
 	function tileAtPos(pos) {
 		for (var i=0; i<tileCount; i++) {
@@ -33,11 +33,11 @@ Rectangle {
 		spacing: 4
 		Repeater {
 			id: repeater
-			model: tileCount
+			model: dataArray
 			delegate: Tile {
 				id: delegate
 				anchors.bottom: parent.bottom
-				tileSize: Math.random() * 95 + 5
+				tileSize: modelData
 				tileLabel: tileSize
 				property int pos: index
 
