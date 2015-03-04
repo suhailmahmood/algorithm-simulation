@@ -32,7 +32,7 @@ Rectangle {
 			NumberAnimation { duration: 400; easing.type: Easing.InOutQuad }
 		}
 		onClicked: {
-			root.dataInput = Functions.getNRandom(5)
+			root.dataInput = Functions.getNRandom()
 		}
 	}
 
@@ -60,10 +60,11 @@ Rectangle {
 
 		TextInput {
 			id: textInput
-			text: "Text"
 			anchors.verticalCenter: parent.verticalCenter
 			cursorVisible: false
 			color: "white"
+			text: "input..."
+			selectByMouse: true
 			font {
 				pixelSize: 17
 			}

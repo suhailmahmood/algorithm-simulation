@@ -6,7 +6,7 @@ Rectangle {
 	id: selection
 
 	width: 892
-	height: 300
+	height: 360
 	color: "#7185e8"
 	radius: 10
 
@@ -19,48 +19,75 @@ Rectangle {
 	property var element2
 	property int currentLine
 
+	Rectangle {
+		id: mainArea
+		anchors.centerIn: parent
+		width: 892
+		height: 300
+		color: "transparent"
 
+		TilesWrapper {
+			id: tilesRow
+			dataArray: Functions.getNRandom()
+			anchors.verticalCenter: parent.verticalCenter
+		}
 
-	TilesWrapper {
-		id: tilesRow
-		tileSizeArray: Functions.getNRandom(10)
-		anchors.verticalCenter: parent.verticalCenter
+		PseudoCodeWrapper {
+			id: pseudoCode
+			height: 270
+			anchors.left: tilesRow.right
+			anchors.verticalCenter: parent.verticalCenter
+			pseudocode: [
+				"for (i=1 to n-1)",
+				"{",
+				"   min_loc = i",
+				"   for (j=i+1 to n)",
+				"   {",
+				"      if (array[j] < array[min_loc])",
+				"         min_loc = j",
+				"   }",
+				"   if (min_loc != i)",
+				"      swap(array[min_loc], array[i])",
+				"}"
+			]
+		}
+		Text {
+			id: minloc
+			text: "i:" + (i + 1) + "   min_loc:" + ((min_loc === -1) ? "" : (min_loc + 1))
+			anchors.horizontalCenter: tilesRow.horizontalCenter
+			font.family: "consolas"
+			font.pixelSize: 30
+		}
 	}
+//	Text {
+//		text: "Click to pause/resume"
+//		anchors.horizontalCenter: parent.horizontalCenter
+//		y: parent.height - height
+//		color: "white"
+//		font {
+//			family: "algerian"
+//			pointSize: 13
+//		}
+//	}
 
-	PseudoCodeWrapper {
-		id: pseudoCode
-		anchors.left: tilesRow.right
-		anchors.verticalCenter: parent.verticalCenter
-		pseudocode: [
-			"for (i=1 to n-1)",
-			"{",
-			"   min_loc = i",
-			"   for (j=i+1 to n)",
-			"   {",
-			"      if (array[j] < array[min_loc])",
-			"         min_loc = j",
-			"   }",
-			"   if (min_loc != i)",
-			"      swap(array[min_loc], array[i])",
-			"}"
-		]
+	Drawer {
+		id: drawerBubble
+		anchors.top: mainArea.bottom
+		anchors.left: parent.left
+		onDataInputChanged: {
+			tilesRow.dataArray = drawerBubble.dataInput
+			i = j = currentLine = 0
+			for(var p=0; p<4; p++)
+				start_pause.timers[p].stop()
+		}
 	}
-	Text {
-		id: minloc
-		text: "i:" + (i + 1) + "   min_loc:" + ((min_loc === -1) ? "" : (min_loc + 1))
-		anchors.horizontalCenter: tilesRow.horizontalCenter
-		y: 50
-		font.family: "consolas"
-		font.pixelSize: 30
-	}
-
 
 	// 4 Timers and 'start_pause' MouseArea below
 
 
 	MouseArea {
 		id: start_pause
-		anchors.fill: parent
+		anchors.fill: mainArea
 		property var timers: [outerLoopTimer, innerLoopTimer, lastSwapTimer, sleeper]
 		property int runningTimer: -1
 		onClicked: {

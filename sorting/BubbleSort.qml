@@ -22,11 +22,11 @@ Rectangle {
 		anchors.centerIn: parent
 		width: 892
 		height: 300
-		color: "#ec7a0f"
+		color: "transparent"
 
 		TilesWrapper {
 			id: tilesRow
-			dataArray: Functions.getNRandom(10)
+			dataArray: Functions.getNRandom()
 			anchors.verticalCenter: parent.verticalCenter
 		}
 
@@ -54,8 +54,6 @@ Rectangle {
 				start_pause.timers[p].stop()
 		}
 	}
-
-	Component.onCompleted: print(tileCount)
 
 	// 3 Timers and the MouseArea below
 

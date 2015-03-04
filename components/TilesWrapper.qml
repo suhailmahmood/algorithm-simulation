@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import "../scripts/script.js" as Functions
 
 Rectangle {
 	id: root
@@ -6,7 +7,7 @@ Rectangle {
 	width: 552; height: 300
 	color: "transparent"
 
-	property var dataArray: []
+	property var dataArray: Functions.getNRandom()
 	property int tileCount: dataArray.length
 
 	function tileAtPos(pos) {
@@ -45,6 +46,12 @@ Rectangle {
 					NumberAnimation {
 						duration: 400
 						easing.type: Easing.InOutBack
+					}
+				}
+				Behavior on y {
+					NumberAnimation {
+						duration: 400
+						easing.type: Easing.OutBack
 					}
 				}
 			}

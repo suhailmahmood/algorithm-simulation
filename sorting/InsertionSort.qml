@@ -44,7 +44,7 @@ Rectangle {
 
 	TilesWrapper {
 		id: tilesRow
-		tileSizeArray: Functions.getNRandom(10)
+		dataArray: Functions.getNRandom(5)
 		anchors.verticalCenter: parent.verticalCenter
 	}
 

@@ -10,7 +10,7 @@ Rectangle {
 	}
 
 	width: 50
-	height: tileSize
+	height: { if(tileSize === 0) return 1; else tileSize; }
 	color: "green"
 	border.color: Qt.lighter(color)
 
