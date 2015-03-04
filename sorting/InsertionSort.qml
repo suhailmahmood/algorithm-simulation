@@ -33,14 +33,6 @@ Rectangle {
 		font.pixelSize: 30
 	}
 
-	Tile {
-		id: temp
-		anchors.left: parent.left
-		anchors.verticalCenter: parent.verticalCenter
-		tileSize: 0
-		tileLabel: tileSize
-	}
-
 	TilesWrapper {
 		id: tilesRow
 		dataArray: Functions.getNRandom()

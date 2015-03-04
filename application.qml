@@ -10,6 +10,8 @@ Window {
 	color: "#3C3C3C"
 	title: "Algorithm Simulator"
 
+	FontLoader { id: papyrusFont; source: "fonts/Papyrus.ttf" }
+
 	MouseArea {
 		id: toggleVisibility
 		anchors.fill: parent
@@ -27,25 +29,29 @@ Window {
 		visible: status == Loader.Ready
 	}
 
-	PlasticButton {
+	Button {
 		id: exitButton
 		width: 100
 		height: 40
-		radius: 20
 		text: "Exit"
+		textSize: 14
+		boldText: true
+		fontFamily: papyrusFont.name
 		x: parent.width - 120
 		y: 20
 		onClicked: Qt.quit()
 	}
 
-	PlasticButton {
+	Button {
 		id: backButton
 		width: 100
 		height: 40
-		radius: 20
 		text: "Back"
+		textSize: 14
+		boldText: true
+		fontFamily: papyrusFont.name
 		x: 20
-		y: parent.height - 60
+		y: 20
 		visible: false
 		onClicked: {
 			loader.setSource("")
@@ -77,7 +83,7 @@ Window {
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.right }
 			text: "SelectionSort"
 			onClicked: {
-				loader.setSource("sorting/SelectionSort.qml", { tileCount: 10 })
+				loader.setSource("sorting/SelectionSort.qml")
 				backButton.visible = true
 				choiceRing.visible = false
 			}
@@ -88,7 +94,7 @@ Window {
 			anchors { verticalCenter: parent.top; horizontalCenter: parent.horizontalCenter }
 			text: "InsertionSort"
 			onClicked: {
-				loader.setSource("sorting/InsertionSort.qml", {tileCount: 10})
+				loader.setSource("sorting/InsertionSort.qml")
 				backButton.visible = true
 				choiceRing.visible = false
 			}

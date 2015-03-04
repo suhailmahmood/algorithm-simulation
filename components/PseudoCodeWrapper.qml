@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Rectangle {
-	id: codeWrapper
+	id: root
 
 	width: 340; height: 100
 	color: "#e0d4d4"
