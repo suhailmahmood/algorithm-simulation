@@ -31,15 +31,13 @@ Rectangle {
 		id: tilesRow
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.verticalCenter: parent.verticalCenter
-		spacing: 4
+		spacing: 5
 		Repeater {
 			id: repeater
 			model: dataArray
 			delegate: Tile {
 				id: delegate
-				anchors.bottom: parent.bottom
 				tileSize: modelData
-				tileLabel: tileSize
 				property int pos: index
 
 				Behavior on x {

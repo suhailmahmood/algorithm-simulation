@@ -6,7 +6,7 @@ Rectangle {
 	id: bubble
 
 	width: mainArea.width
-	height: mainArea.height+100
+	height: mainArea.height+60
 	color: "#7185e8"
 
 	property int speed: 500	// minimum safe value is 120, more cause tiles to be misplaced
@@ -26,7 +26,6 @@ Rectangle {
 
 		TilesWrapper {
 			id: tilesRow
-			dataArray: Functions.getNRandom()
 			anchors.verticalCenter: parent.verticalCenter
 		}
 
@@ -63,24 +62,26 @@ Rectangle {
 		property var timers: [codeSelectTimer, sortTimer, sleeper]
 		property int runningTimer: -1
 		onClicked: {
-			if(timers[0].running || timers[1].running || timers[2].running) {
+			if(tilesRow.dataArray.length !== 0) {
+				if(timers[0].running || timers[1].running || timers[2].running) {
 
-				if(timers[0].running)
-					runningTimer = 0
+					if(timers[0].running)
+						runningTimer = 0
 
-				else if(timers[1].running)
-					runningTimer = 1
+					else if(timers[1].running)
+						runningTimer = 1
 
-				else if(timers[2].running)
-					runningTimer = 2
+					else if(timers[2].running)
+						runningTimer = 2
 
-				timers[runningTimer].stop()
-			}
-			else if(runningTimer === -1) {
-				codeSelectTimer.start()
-			}
-			else {
-				timers[runningTimer].start()
+					timers[runningTimer].stop()
+				}
+				else if(runningTimer === -1) {
+					codeSelectTimer.start()
+				}
+				else {
+					timers[runningTimer].start()
+				}
 			}
 		}
 	}
@@ -112,14 +113,14 @@ Rectangle {
 			if(selectTilePhase) {
 				element1 = tilesRow.tileAtPos(j)
 				element2 = tilesRow.tileAtPos(j + 1)
-				element1.color = "gray"
-				element2.color = "gray"
+				element1.tileColor = "gray"
+				element2.tileColor = "gray"
 
 				selectTilePhase = false
 			}
 			else {
 				selectTilePhase = true
-				if (parseInt(element1.tileLabel) > parseInt(element2.tileLabel)) {
+				if (element1.tileSize > element2.tileSize) {
 					pseudoCode.highlightLine(3)
 					tilesRow.swap(element1, element2)
 				}
@@ -143,8 +144,8 @@ Rectangle {
 		interval: speed
 		repeat: false
 		onTriggered: {
-			element1.color = "green"
-			element2.color = "green"
+			element1.tileColor = "green"
+			element2.tileColor = "green"
 			if(i === tileCount-1) {
 				codeSelectTimer.stop()
 				pseudoCode.highlightLine(-1)

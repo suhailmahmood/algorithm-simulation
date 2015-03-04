@@ -1,29 +1,36 @@
 import QtQuick 2.0
 
 Rectangle {
-	id: tile
+	id: tileWrapper
+	width: 50
+	height: 150
 
-	property string tileLabel: label.text
-	property int tileSize: height
+	color: "transparent"
+
+	property alias tileColor: tile.color
+	property int tileSize: tile.height
 	property variant webfont: FontLoader {
 		source: "../fonts/Papyrus.ttf"
 	}
 
-	width: 50
-	height: { if(tileSize === 0) return 1; else tileSize; }
-	color: "green"
-	border.color: Qt.lighter(color)
+	Rectangle {
+		id: tile
+		width: parent.width; height: tileSize
+		color: "green"
+		border.color: Qt.lighter(color)
+		anchors.bottom: parent.bottom
 
-	Text {
-		id: label
-		color: "yellow";
-		anchors.horizontalCenter: parent.horizontalCenter
-		font {
-			family: webfont.name
-			pixelSize: 25
-			bold: true
+		Text {
+			id: label
+			color: "yellow";
+			anchors.horizontalCenter: parent.horizontalCenter
+			anchors.top: parent.bottom
+			font {
+				family: webfont.name
+				pointSize: 18
+				bold: true
+			}
+			text: tileWrapper.tileSize
 		}
-		anchors.top: parent.bottom
-		text: tileLabel
 	}
 }

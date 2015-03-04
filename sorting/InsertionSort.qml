@@ -8,7 +8,6 @@ Rectangle {
 	width: 892
 	height: 300
 	color: "#7185e8"
-	radius: 10
 
 	property int speed: 1000	// minimum safe value is XXX, more causes tiles to be misplaced
 	property int i:1
@@ -44,12 +43,13 @@ Rectangle {
 
 	TilesWrapper {
 		id: tilesRow
-		dataArray: Functions.getNRandom(5)
+		dataArray: Functions.getNRandom()
 		anchors.verticalCenter: parent.verticalCenter
 	}
 
 	PseudoCodeWrapper {
 		id: pseudoCode
+		height: 180
 		anchors.left: tilesRow.right
 		anchors.verticalCenter: parent.verticalCenter
 		pseudocode: [
@@ -77,12 +77,15 @@ Rectangle {
 					currentLine++
 				}
 				else {
+					// i == tileCount
 					stop()
 				}
 				break
 			case 1:
-				temp.tileSize = tilesRow.tileAtPos(i).tileSize
-				//				tilesRow.tileAtPos(i).opacity = 0
+				element1 = tilesRow.tileAtPos(i)
+				print(element1.y)
+				element1.y -= 100
+				print(element1.y)
 				currentLine++
 				break
 			case 2:
@@ -90,18 +93,18 @@ Rectangle {
 				currentLine++
 				break
 			case 3:
-				element1 = tilesRow.tileAtPos(j-1)
-				//				element1.color = "gray"
-				//				temp.color = "gray"
+				element2 = tilesRow.tileAtPos(j-1)
+				element1.color = "gray"
 				if (j <= 0 || (element1.tileSize <= temp.tileSize)) {
 					currentLine = 6
 				}
 				else {
+					// to go to case 4
 					currentLine++
 				}
 				break
 			case 4:
-				tilesRow.tileAtPos(j).tileSize = tilesRow.tileAtPos(j-1).tileSize
+				tilesRow.swap(tilesRow.tileAtPos(j), element2)
 				currentLine++
 				break
 			case 5:
@@ -109,7 +112,7 @@ Rectangle {
 				currentLine = 3
 				break
 			case 6:
-				tilesRow.tileAtPos(j).tileSize = temp.tileSize
+				tilesRow.tileAtPos(j).y -= 100
 				//				tilesRow.tileAtPos(j).opacity = 1
 				i++
 				currentLine = 0

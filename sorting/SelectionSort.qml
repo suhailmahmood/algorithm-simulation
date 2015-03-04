@@ -8,7 +8,6 @@ Rectangle {
 	width: 892
 	height: 360
 	color: "#7185e8"
-	radius: 10
 
 	property int speed: 500 // a value less that 150 is problematic
 	property int i
@@ -59,16 +58,16 @@ Rectangle {
 			font.pixelSize: 30
 		}
 	}
-//	Text {
-//		text: "Click to pause/resume"
-//		anchors.horizontalCenter: parent.horizontalCenter
-//		y: parent.height - height
-//		color: "white"
-//		font {
-//			family: "algerian"
-//			pointSize: 13
-//		}
-//	}
+	//	Text {
+	//		text: "Click to pause/resume"
+	//		anchors.horizontalCenter: parent.horizontalCenter
+	//		y: parent.height - height
+	//		color: "white"
+	//		font {
+	//			family: "algerian"
+	//			pointSize: 13
+	//		}
+	//	}
 
 	Drawer {
 		id: drawerBubble
@@ -91,23 +90,24 @@ Rectangle {
 		property var timers: [outerLoopTimer, innerLoopTimer, lastSwapTimer, sleeper]
 		property int runningTimer: -1
 		onClicked: {
-			if (timers[0].running || timers[1].running || timers[2].running
-					|| timers[3].running) {
+			if(tilesRow.dataArray.length !== 0) {
+				if (timers[0].running || timers[1].running || timers[2].running
+						|| timers[3].running) {
+					if (timers[0].running)
+						runningTimer = 0
+					else if (timers[1].running)
+						runningTimer = 1
+					else if (timers[2].running)
+						runningTimer = 2
+					else if (timers[3].running)
+						runningTimer = 3
 
-				if (timers[0].running)
-					runningTimer = 0
-				else if (timers[1].running)
-					runningTimer = 1
-				else if (timers[2].running)
-					runningTimer = 2
-				else if (timers[3].running)
-					runningTimer = 3
-
-				timers[runningTimer].stop()
-			} else if (runningTimer === -1) {
-				outerLoopTimer.start()
-			} else {
-				timers[runningTimer].start()
+					timers[runningTimer].stop()
+				} else if (runningTimer === -1) {
+					outerLoopTimer.start()
+				} else {
+					timers[runningTimer].start()
+				}
 			}
 		}
 	}
@@ -145,14 +145,14 @@ Rectangle {
 			if (selectTilePhase) {
 				element1 = tilesRow.tileAtPos(j)
 				element2 = tilesRow.tileAtPos(min_loc)
-				element1.color = "gray"
-				element2.color = "gray"
+				element1.tileColor = "gray"
+				element2.tileColor = "gray"
 
 				selectTilePhase = false
 			}
 			else {
 				selectTilePhase = true
-				if (parseInt(element1.tileLabel) < parseInt(element2.tileLabel)) {
+				if (element1.tileSize < element2.tileSize) {
 					pseudoCode.highlightLine(6)
 					min_loc = j
 				}
@@ -177,8 +177,8 @@ Rectangle {
 			if (selectTilePhase) {
 				element1 = tilesRow.tileAtPos(min_loc)
 				element2 = tilesRow.tileAtPos(i)
-				element1.color = "red"
-				element2.color = "red"
+				element1.tileColor = "red"
+				element2.tileColor = "red"
 				selectTilePhase = false
 			}
 			else {
@@ -201,8 +201,8 @@ Rectangle {
 		interval: speed
 		repeat: false
 		onTriggered: {
-			element1.color = "green"
-			element2.color = "green"
+			element1.tileColor = "green"
+			element2.tileColor = "green"
 			if (i === tileCount - 1) {
 				outerLoopTimer.stop()
 				pseudoCode.highlightLine(-1)
