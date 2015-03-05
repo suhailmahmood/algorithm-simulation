@@ -9,7 +9,7 @@ Rectangle {
 	height: 360
 	color: "#f18912"
 
-	property int speed: 100 // speed as low as 50 still works
+	property int speed: 500 // speed as low as 50 still works
 	property int i
 	property int j
 	property int min_loc: 0
@@ -32,16 +32,6 @@ Rectangle {
 			anchors.verticalCenter: parent.verticalCenter
 		}
 
-		Text {
-			id: algoname
-			text: "Selection Sort"
-			anchors.bottom: pseudoCode.top
-			anchors.horizontalCenter: pseudoCode.horizontalCenter
-			font {
-				family: "algerian"
-				pointSize: 17
-			}
-		}
 
 		PseudoCodeWrapper {
 			id: pseudoCode
@@ -64,18 +54,29 @@ Rectangle {
 		}
 
 		Text {
+			id: algoname
+			text: "Selection Sort"
+			anchors.bottom: pseudoCode.top
+			anchors.horizontalCenter: pseudoCode.horizontalCenter
+			font {
+				family: "algerian"
+				pointSize: 17
+			}
+		}
+
+		Text {
 			id: minLocText
 			text: "i:" + i + "  j: " + j + "   min_loc:" + min_loc
 			anchors.horizontalCenter: tilesRow.horizontalCenter
 			font.family: "consolas"
-			font.pixelSize: 30
+			font.pointSize: 25
 		}
-
 	}
 
 	FontLoader { id: papyrusFont; source: "../fonts/Papyrus.ttf" }
 
 	Button {
+		id: start_pause
 		width: 130
 		height: 50
 		text: {
@@ -100,12 +101,28 @@ Rectangle {
 		}
 	}
 
+	Button {
+		id: oneStep
+		width: 40
+		height: 50
+		text: "   1\nStep"
+		fontFamily: papyrusFont.name
+		boldText: true
+		textSize: 10
+		anchors.left: start_pause.right
+		y: start_pause.y
+		onClicked: {
+			timer.repeat = false
+			timer.start()
+		}
+	}
+
 	Drawer {
-		id: drawerBubble
+		id: drawer
 		anchors.top: mainArea.bottom
 		anchors.left: parent.left
 		onDataInputChanged: {
-			tilesRow.dataArray = drawerBubble.dataInput
+			tilesRow.dataArray = drawer.dataInput
 			i = j = currentLine = min_loc = 0
 			print("data changed")
 		}
@@ -115,11 +132,12 @@ Rectangle {
 		id: timer
 		interval: speed
 		repeat: true
-		triggeredOnStart: true
-		property bool selectTilePhase: true
 		onTriggered: {
 			if(tilesRow.dataArray.length !== 0) {
 				sorted = false
+
+				// BEGIN SORTING
+
 				pseudoCode.highlightLine(currentLine)
 
 				switch(currentLine) {

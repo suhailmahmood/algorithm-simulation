@@ -9,7 +9,7 @@ Rectangle {
 	height: mainArea.height+60
 	color: "#7185e8"
 
-	property int speed: 500	// minimum safe value is 120, more cause tiles to be misplaced
+	property int speed: 120	// minimum safe value is 120, more cause tiles to be misplaced
 	property int i
 	property int j
 	property alias tileCount: tilesRow.tileCount
@@ -43,11 +43,11 @@ Rectangle {
 	}
 
 	Drawer {
-		id: drawerBubble
+		id: drawer
 		anchors.top: mainArea.bottom
 		anchors.left: parent.left
 		onDataInputChanged: {
-			tilesRow.dataArray = drawerBubble.dataInput
+			tilesRow.dataArray = drawer.dataInput
 			i = j = currentLine = 0
 			for(var p=0; p<3; p++)
 				start_pause.timers[p].stop()

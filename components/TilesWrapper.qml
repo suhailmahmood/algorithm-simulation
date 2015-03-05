@@ -11,7 +11,6 @@ Rectangle {
 	property int tileCount: dataArray.length
 
 	function tileAtPos(pos) {
-		print(pos)
 		for (var i=0; i<tileCount; i++) {
 			if (repeater.itemAt(i).pos === pos) {
 				return repeater.itemAt(i)
