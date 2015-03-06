@@ -14,7 +14,7 @@ Rectangle {
 	property color hoverColor: "#777171"
 	property color pressedColor: Qt.darker(hoverColor)
 	property string text: buttonText.text= "Button"
-	property int textSize: buttonText.font.pointSize
+	property real textSize: buttonText.font.pointSize
 	property font fontFamily: buttonText.font.family
 	property bool boldText: buttonText.font.bold
 
@@ -31,18 +31,18 @@ Rectangle {
 	}
 
 	MouseArea {
-		id: mouseArea
+		id: buttonArea
 		hoverEnabled: true
 		anchors.fill: parent
 		onPressed: color = pressedColor
-		onReleased: color = mouseArea.containsMouse ? hoverColor : color
+		onReleased: color = buttonArea.containsMouse ? hoverColor : color
 		onClicked: root.clicked()
 
 	}
 
 	states:
 		State {
-			name: "mouseIn"; when: mouseArea.containsMouse;
+			name: "mouseIn"; when: buttonArea.containsMouse;
 			PropertyChanges {
 				target: root; color: hoverColor
 			}
@@ -51,4 +51,7 @@ Rectangle {
 	Behavior on color {
 		ColorAnimation { duration: 300 }
 	}
+
+	scale: buttonArea.pressed ? 0.95 : 1.00
+	Behavior on scale { NumberAnimation{ duration: 55 } }
 }

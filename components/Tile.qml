@@ -9,6 +9,7 @@ Rectangle {
 
 	property alias tileColor: tile.color
 	property int tileSize: tile.height
+	property string tileLabel: ""
 	property variant webfont: FontLoader {
 		source: "../fonts/Papyrus.ttf"
 	}
@@ -30,7 +31,7 @@ Rectangle {
 				pointSize: 18
 				bold: true
 			}
-			text: tileWrapper.tileSize
+			text: tileLabel === "" ? tileLabel : tileWrapper.tileSize
 		}
 	}
 }
