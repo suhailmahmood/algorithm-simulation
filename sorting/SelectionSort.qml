@@ -28,7 +28,6 @@ Rectangle {
 
 		TilesWrapper {
 			id: tilesRow
-			dataArray: Functions.getNRandom()
 			anchors.verticalCenter: parent.verticalCenter
 		}
 
@@ -73,8 +72,6 @@ Rectangle {
 		}
 	}
 
-	FontLoader { id: papyrusFont; source: "../fonts/Papyrus.ttf" }
-
 	Button {
 		id: start_pause
 		width: 130
@@ -85,7 +82,7 @@ Rectangle {
 			else
 				return "Pause"
 		}
-		fontFamily: papyrusFont.name
+		fontFamily: FontLoaders.papyrusFont.name
 		boldText: true
 		textSize: 15
 		anchors.horizontalCenter: parent.horizontalCenter
@@ -105,8 +102,8 @@ Rectangle {
 		id: oneStep
 		width: 40
 		height: 50
-		text: "   1\nStep"
-		fontFamily: papyrusFont.name
+		text: "    1\nStep"
+		fontFamily: FontLoaders.papyrusFont.name
 		boldText: true
 		textSize: 10
 		anchors.left: start_pause.right

@@ -47,7 +47,23 @@ Rectangle {
 				count--
 			}
 		}
+
+		Text {
+			id: tos
+			text: "TOS"
+			anchors.left: items[count-1].right
+			anchors.verticalCenter: items[count-1].verticalCenter
+			Behavior on y {
+				NumberAnimation {duration: 400; easing.type: Easing.OutBounce}
+			}
+		}
 	}
+
+	Keys.onDownPressed: stack.push()
+	Keys.onUpPressed: stack.pop()
+	Keys.onSpacePressed: stack.push()
+	Keys.onDeletePressed: stack.pop()
+
 
 	Button {
 		id: pushButton

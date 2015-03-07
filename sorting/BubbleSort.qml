@@ -3,19 +3,20 @@ import "../components"
 import "../scripts/script.js" as Functions
 
 Rectangle {
-	id: bubble
+	id: root
 
 	width: mainArea.width
 	height: mainArea.height+60
 	color: "#7185e8"
 
-	property int speed: 120	// minimum safe value is 120, more cause tiles to be misplaced
+	property int speed: 300	// minimum safe value is 120, more cause tiles to be misplaced
 	property int i
 	property int j
 	property alias tileCount: tilesRow.tileCount
 	property var element1
 	property var element2
 	property int currentLine
+	property bool sorted
 
 	Rectangle {
 		id: mainArea
@@ -35,10 +36,31 @@ Rectangle {
 			anchors.verticalCenter: parent.verticalCenter
 			pseudocode: [
 				"for (i=1 to n-1)",
-				"  for (j=1 to n-i-1)",
+				"  for (j=1 to n-i)",
 				"    if (array[j] > array[j+1])",
 				"      swap(array[j], array[j+1])"
 			]
+		}
+
+		Text {
+			id: algoname
+			text: "Bubble Sort"
+			anchors.bottom: pseudoCode.top
+			anchors.horizontalCenter: pseudoCode.horizontalCenter
+			font {
+				family: FontLoaders.algerianFont.name
+				pointSize: 17
+			}
+		}
+
+		Text {
+			id: ijValText
+			text: "n:" + tileCount + "  i:" + (i+1) + "  j:" + (j+1)
+			anchors.horizontalCenter: tilesRow.horizontalCenter
+			font {
+				family: FontLoaders.papyrusFont.name
+				pointSize: 25
+			}
 		}
 	}
 
@@ -48,110 +70,124 @@ Rectangle {
 		anchors.left: parent.left
 		onDataInputChanged: {
 			tilesRow.dataArray = drawer.dataInput
-			i = j = currentLine = 0
-			for(var p=0; p<3; p++)
-				start_pause.timers[p].stop()
+			timer.stop()
+			timer.reset()
 		}
 	}
 
-	// 3 Timers and the MouseArea below
-
-	MouseArea {
+	Button {
 		id: start_pause
-		anchors.fill: mainArea
-		property var timers: [codeSelectTimer, sortTimer, sleeper]
-		property int runningTimer: -1
+		width: 120
+		height: 50
+		text: timer.running ? "Pause" : "Start"
+		fontFamily: FontLoaders.papyrusFont.name
+		boldText: true
+		textSize: 15
+		anchors.horizontalCenter: parent.horizontalCenter
+		y: root.height - 70
 		onClicked: {
-			if(tilesRow.dataArray.length !== 0) {
-				if(timers[0].running || timers[1].running || timers[2].running) {
-
-					if(timers[0].running)
-						runningTimer = 0
-
-					else if(timers[1].running)
-						runningTimer = 1
-
-					else if(timers[2].running)
-						runningTimer = 2
-
-					timers[runningTimer].stop()
-				}
-				else if(runningTimer === -1) {
-					codeSelectTimer.start()
-				}
-				else {
-					timers[runningTimer].start()
-				}
+			if(!sorted && tilesRow.dataArray.length === 0) {
+				tilesRow.dataArray = Functions.getNRandom()
+				timer.start()
 			}
-		}
-	}
-
-	Timer {
-		id:codeSelectTimer
-		interval: speed * 1.33
-		running: false
-		repeat: true
-		triggeredOnStart: true
-		onTriggered: {
-			// when currentLine is 3rd line, send control to sortTimer
-			if(currentLine === 2) {
-				stop()
-				sortTimer.start()
-			}
-			pseudoCode.highlightLine(currentLine)
-			currentLine++
-		}
-	}
-
-	Timer {
-		id: sortTimer
-		interval: speed * 1.33
-		repeat: true
-		triggeredOnStart: true
-		property bool selectTilePhase: true
-		onTriggered: {
-			if(selectTilePhase) {
-				element1 = tilesRow.tileAtPos(j)
-				element2 = tilesRow.tileAtPos(j + 1)
-				element1.tileColor = "gray"
-				element2.tileColor = "gray"
-
-				selectTilePhase = false
+			else if(sorted && !timer.running) {
+				tilesRow.dataArray = Functions.getNRandom()
+				timer.reset()
+				timer.start()
 			}
 			else {
-				selectTilePhase = true
-				if (element1.tileSize > element2.tileSize) {
-					pseudoCode.highlightLine(3)
-					tilesRow.swap(element1, element2)
-				}
-				sleeper.start()
-				j++
-				if(j === tileCount-i-1) {
-					i++
-					j = 0
-					currentLine = 0
-				}
-				else {
-					currentLine = 1
-				}
-				stop()
+				timer.running ? timer.stop() : timer.start()
 			}
 		}
 	}
 
+	Button {
+		id: oneStep
+		width: 40
+		height: 50
+		text: "    1\nStep"
+		fontFamily: FontLoaders.papyrusFont.name
+		boldText: true
+		textSize: 10
+		anchors.left: start_pause.right
+		y: start_pause.y
+		onClicked: {
+			timer.repeat = false
+			timer.start()
+		}
+	}
+
 	Timer {
-		id: sleeper
+		id: timer
 		interval: speed
-		repeat: false
+		repeat: true
+		property bool innerLoopBegin: true
+		property bool initial: true
+
+		function reset() {
+			initial = innerLoopBegin = true
+			sorted = false
+			i = j = 0
+		}
+
 		onTriggered: {
-			element1.tileColor = "green"
-			element2.tileColor = "green"
-			if(i === tileCount-1) {
-				codeSelectTimer.stop()
-				pseudoCode.highlightLine(-1)
-			}
-			else {
-				codeSelectTimer.start()
+			if(tilesRow.dataArray.length !== 0) {
+				sorted = false
+
+				// BEGIN SORTING
+
+				pseudoCode.highlightLine(currentLine)
+
+				switch(currentLine) {
+				case(0):
+					if(i === tileCount-1) {
+						stop()
+						initial = true
+						currentLine = -1
+						sorted = true
+					}
+					else {
+						i = initial ? i : i+1
+						currentLine = 1
+					}
+					break
+
+				case(1):
+					if(!initial) {
+						element1.tileColor = "green"
+						element2.tileColor = "green"
+					}
+					initial = false
+
+					j = innerLoopBegin ? 0 : j + 1
+					if(j === tileCount-i-1) {
+						currentLine = 0
+						innerLoopBegin = true
+					}
+					else {
+						currentLine = 2
+					}
+					break
+
+				case(2):
+					element1 = tilesRow.tileAtPos(j)
+					element2 = tilesRow.tileAtPos(j+1)
+					element1.tileColor = "gray"
+					element2.tileColor = "gray"
+					innerLoopBegin = false
+
+					if (element1.tileSize > element2.tileSize) {
+						currentLine = 3
+					}
+					else {
+						currentLine = 1
+					}
+					break
+				case(3):
+					tilesRow.swap(element1, element2)
+					currentLine = 1
+					break
+				}
 			}
 		}
 	}

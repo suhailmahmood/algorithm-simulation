@@ -7,7 +7,7 @@ Rectangle {
 
 	width: 892
 	height: 560
-	color: "#7185e8"
+	color: "#1cc1e6"
 
 	property int speed: 200	// minimum safe value is 200, more causes tiles to be misplaced
 	property int i:1
@@ -26,7 +26,6 @@ Rectangle {
 
 		TilesWrapper {
 			id: tilesRow
-			dataArray: Functions.getNRandom()
 			anchors.verticalCenter: parent.verticalCenter
 		}
 
@@ -52,39 +51,27 @@ Rectangle {
 			anchors.bottom: pseudoCode.top
 			anchors.horizontalCenter: pseudoCode.horizontalCenter
 			font {
-				family: "algerian"
+				family: FontLoaders.algerianFont.name
 				pointSize: 17
 			}
 		}
 
 		Text {
 			id: varValuesText
-			text: "i:" + i + "  j:" + j + "  currentLine:" + currentLine
+			text: "i: " + i + "    j: " + j
 			anchors.horizontalCenter: tilesRow.horizontalCenter
-			font.family: "cosolas"
+			font.family: FontLoaders.papyrusFont.name
+			font.bold: true
 			font.pointSize: 25
 		}
 	}
 
-	Drawer {
-		id: drawer
-		anchors.top: mainArea.bottom
-		anchors.left: parent.left
-		onDataInputChanged: {
-			tilesRow.dataArray = drawer.dataInput
-			i = 1
-			j = currentLine =  0
-			print("data changed")
-		}
-	}
-
-	FontLoader { id: papyrusFont; source: "../fonts/Papyrus.ttf" }
-
 	Button {
-		width: 130
+		id: start_pause
+		width: 120
 		height: 50
 		text: timer.running ? "Pause" : "Start"
-		fontFamily: papyrusFont.name
+		fontFamily: FontLoaders.papyrusFont.name
 		boldText: true
 		textSize: 15
 		anchors.horizontalCenter: parent.horizontalCenter
@@ -100,12 +87,37 @@ Rectangle {
 		}
 	}
 
+	Button {
+		id: oneStep
+		width: 40
+		height: 50
+		text: "    1\nStep"
+		fontFamily: FontLoaders.papyrusFont.name
+		boldText: true
+		textSize: 10
+		anchors.left: start_pause.right
+		y: start_pause.y
+		onClicked: {
+			timer.repeat = false
+			timer.start()
+		}
+	}
+
+	Drawer {
+		id: drawer
+		anchors.top: mainArea.bottom
+		anchors.left: parent.left
+		onDataInputChanged: {
+			tilesRow.dataArray = drawer.dataInput
+			i = 1
+			j = currentLine =  0
+		}
+	}
 
 	Timer {
 		id: timer
 		interval: speed
 		repeat: true
-		triggeredOnStart: true
 		onTriggered: {
 			if(tilesRow.dataArray.length !== 0) {
 				sorted = false

@@ -8,7 +8,7 @@ Rectangle {
 	color: "transparent"
 
 	property alias tileColor: tile.color
-	property int tileSize: tile.height
+	property int tileSize: tile.height=30
 	property string tileLabel: ""
 	property variant webfont: FontLoader {
 		source: "../fonts/Papyrus.ttf"
@@ -31,7 +31,7 @@ Rectangle {
 				pointSize: 18
 				bold: true
 			}
-			text: tileLabel === "" ? tileLabel : tileWrapper.tileSize
+			text: tileWrapper.tileSize
 		}
 	}
 }
