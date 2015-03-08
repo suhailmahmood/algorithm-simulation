@@ -58,7 +58,7 @@ Rectangle {
 			anchors.bottom: pseudoCode.top
 			anchors.horizontalCenter: pseudoCode.horizontalCenter
 			font {
-				family: "algerian"
+				family: FontLoaders.algerianFont.name
 				pointSize: 17
 			}
 		}
@@ -121,7 +121,6 @@ Rectangle {
 		onDataInputChanged: {
 			tilesRow.dataArray = drawer.dataInput
 			i = j = currentLine = min_loc = 0
-			print("data changed")
 		}
 	}
 
@@ -211,5 +210,4 @@ Rectangle {
 			}
 		}
 	}
-	onSortedChanged: sorted ? "Sorted" : "Not sorted"
 }

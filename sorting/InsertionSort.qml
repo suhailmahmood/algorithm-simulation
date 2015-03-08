@@ -9,7 +9,7 @@ Rectangle {
 	height: 560
 	color: "#1cc1e6"
 
-	property int speed: 200	// minimum safe value is 200, more causes tiles to be misplaced
+	property int speed: 600	// minimum safe value is 200, more causes tiles to be misplaced
 	property int i:1
 	property int j
 	property alias tileCount: tilesRow.tileCount
