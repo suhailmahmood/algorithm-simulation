@@ -9,57 +9,58 @@ Rectangle {
 	height: 660
 	color: "#f18912"
 
-	property int speed: 500 // speed as low as 50 still works
+	property int speed: 500
 	property alias tileCount: tilesRow.tileCount
 	property bool sorted: false
+	property var bArray: []
+	property var aArray: []
 
 	Rectangle {
 		id: mainArea
 		anchors.centerIn: parent
 		width: root.width
-		height: 300
+		height: 450
 		color: "transparent"
 
 		TilesWrapper {
 			id: tilesRow
-			height: 500
+//			color: "green"
+			height: parent.height / 2
 			width: root.width - pseudoCode.width
-			anchors.verticalCenter: parent.verticalCenter
+			anchors.bottom: mainArea.bottom
 		}
 
 		PseudoCodeWrapper {
 			id: pseudoCode
-			height: 420
+			height: 450
 			width: 430
 			textSize: 10
 			anchors.right: mainArea.right
 			anchors.verticalCenter: parent.verticalCenter
 			pseudocode: [
-
-
-"MergeSort():",
-"{",
-"  for(w=1; w<n; w=2*w)",
-"  {",
-"    for(i=0; i<n; i=i+2*w)",
-"      Merge(i, min(i+w, n), min(i+2*w, n))",
-"    copyToOriginalArray()",
-"  }",
-"}",
-" ",
-"Merge(LStart, RStart, End):",
-"{",
-"  L=LStart, R=RStart",
-"  for(j=L; j<End; j++)",
-"  {",
-"    if(L<RStart and (R>=End or ARR[L]<=ARR[R]))",
-"      WORK[j] = ARR[L]",
-"      L = L + 1",
-"    else",
-"      WORK[j] = ARR[R]",
-"      R = R + 1",
-"  }",
-"}"
+				"MergeSort():",
+				"{",
+				"  for(w=1; w<n; w=2*w)",
+				"  {",
+				"    for(i=0; i<n; i=i+2*w)",
+				"      Merge(i, min(i+w, n), min(i+2*w, n))",
+				"    copyToOriginalArray()",
+				"  }",
+				"}",
+				" ",
+				"Merge(LStart, RStart, End):",
+				"{",
+				"  L=LStart, R=RStart",
+				"  for(j=L; j<End; j++)",
+				"  {",
+				"    if(L<RStart and (R>=End or ARR[L]<=ARR[R]))",
+				"      WORK[j] = ARR[L]",
+				"      L = L + 1",
+				"    else",
+				"      WORK[j] = ARR[R]",
+				"      R = R + 1",
+				"  }",
+				"}"
 			]
 		}
 
@@ -75,10 +76,16 @@ Rectangle {
 		}
 
 		Text {
-			id: minLocText
-			text: "i:" + i + "  j: " + j + "   min_loc:" + min_loc
+			id: helpText
+			text: {
+				if(timer.currentLine < 10)
+					return "w: " + timer.w + "\ni: " + timer.i
+				else
+					return "LStart:" + timer.lStart +" RStart:" + timer.rStart + " End:" + timer.end +
+							"\nL:" + timer.l + " R:" + timer.r + " j:" + timer.j
+			}
 			anchors.horizontalCenter: tilesRow.horizontalCenter
-			anchors.top: tilesRow.top
+			anchors.bottom: mainArea.top
 			font.family: "consolas"
 			font.pointSize: 25
 		}
@@ -133,17 +140,23 @@ Rectangle {
 		onDataInputChanged: {
 			tilesRow.dataArray = drawer.dataInput
 			timer.reset()
+
+			//		delete after testing
+			for(var k=0; k<tileCount; k++) {
+				aArray[k] = tilesRow.tileAtPos(k).tileSize
+			}
+			//		delete after testing
 		}
 	}
 
 	Timer {
 		id: timer
-		interval: speed
+		interval: 500
 		repeat: true
-		property var element1
-		property var element2
+		property var leftElement
+		property var rightElement
 		property int currentLine
-		property int width
+		property int w
 		property int lStart
 		property int rStart
 		property int end
@@ -151,14 +164,17 @@ Rectangle {
 		property int r
 		property int i
 		property int j
+		property bool mergeInnerInitial
 
 		function reset() {
 			stop()
-			currentLine = width = lStart = rStart = end = l = r = 0
-			element1 = element2 = null
+			currentLine = w = lStart = rStart = end = l = r = i = j = 0
+			leftElement = rightElement = null
 		}
 
 		onTriggered: {
+			print("\nCurrentLine", currentLine)
+
 			if(tilesRow.dataArray.length !== 0) {
 				sorted = false
 
@@ -172,19 +188,30 @@ Rectangle {
 					break
 
 				case 2:
-					width = (width === 0) ? 1 : (2 * width)
-					currentLine = (width < tileCount) ? 4 : 7
+					w = (w === 0) ? 1 : (2 * w)
+					currentLine = (w < tileCount) ? 4 : 7
+					mergeInnerInitial = true
 					break
 
 				case 4:
-					i = (i === 0) ? 0 : (i + 2 * width)
+					// end is non-zero after first run of the inner loop of MergeSort
+					if(mergeInnerInitial) {
+						i = 0
+						mergeInnerInitial = false
+					}
+					else {
+						i = i + 2 * w
+					}
+
 					currentLine = (i < tileCount) ? 5 : 6
 					break
 				case 5:
 					currentLine = 10
-
 					break
 				case 6:
+					for(var p=0; p<tileCount; p++)
+						aArray[p] = bArray[p]
+					currentLine = 2
 					break
 				case 7:
 					currentLine = 8
@@ -195,8 +222,9 @@ Rectangle {
 					currentLine = -1
 					break
 				case 10:
-					lStart = Math.min(i+width, tileCount)
-					rStart = Math.min(i+2*width, tileCount)
+					lStart = i
+					rStart = Math.min(i+w, tileCount)
+					end = Math.min(i+2*w, tileCount)
 					currentLine = 12
 					break
 				case 12:
@@ -210,15 +238,18 @@ Rectangle {
 					currentLine = (j < end) ? 15 : 21
 					break
 				case 15:
-					element1 = tilesRow.tileAtPos(l)
-					element2 = tilesRow.tileAtPos(r)
-					if(l < rStart && (element1.tileSize <= element2.tileSize))
+					leftElement = aArray[l]
+					rightElement = aArray[r]
+					//					leftElement = tilesRow.tileAtPos(l)
+					//					rightElement = tilesRow.tileAtPos(r)
+					if(l < rStart && (r >= end || leftElement <= rightElement))
 						currentLine = 16
 					else
 						currentLine = 18
 					break
 				case 16:
-					// copy element1 to WORK array at position j
+					bArray[j] = aArray[l]
+					// copy leftElement to WORK array at position j
 					currentLine = 17
 					break
 				case 17:
@@ -229,10 +260,12 @@ Rectangle {
 					currentLine = 19
 					break
 				case 19:
-					// copy element2 to WORK array at position j
+					bArray[j] = aArray[r]
+					// copy rightElement to WORK array at position j
 					currentLine = 20
 					break
 				case 20:
+					r++
 					currentLine = 13
 					break
 				case 21:
@@ -242,6 +275,14 @@ Rectangle {
 					currentLine = 4
 				}
 			}
+			print("w:", w, " i:", i)
+			print("LStart:", lStart, " RStart:", rStart, " End:", end)
+			print("L:", l, " R:", r, " j:", j)
 		}
+	}
+	onSortedChanged: {
+		if(sorted)
+			for(var y=0; y<tileCount; y++)
+				print(aArray[y])
 	}
 }

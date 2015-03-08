@@ -32,6 +32,7 @@ Rectangle {
 
 		PseudoCodeWrapper {
 			id: pseudoCode
+			height: 170
 			anchors.left: tilesRow.right
 			anchors.verticalCenter: parent.verticalCenter
 			pseudocode: [

@@ -6,11 +6,11 @@ import "components"
 Window {
 	id: mainWindow
 
-	width: 1000; height: 600
+	width: 1150; height: 700
+	x: (Screen.desktopAvailableWidth - width) / 2
+	y: (Screen.desktopAvailableHeight - height) / 2
 	color: "#3C3C3C"
 	title: "Algorithm Simulator"
-
-	FontLoader { id: papyrusFont; source: "fonts/Papyrus.ttf" }
 
 	MouseArea {
 		id: toggleVisibility
@@ -36,7 +36,7 @@ Window {
 		text: "Exit"
 		textSize: 14
 		boldText: true
-		fontFamily: papyrusFont.name
+		fontFamily: FontLoaders.papyrusFont.name
 		x: parent.width - 120
 		y: 20
 		onClicked: Qt.quit()
@@ -49,7 +49,7 @@ Window {
 		text: "Back"
 		textSize: 14
 		boldText: true
-		fontFamily: papyrusFont.name
+		fontFamily: FontLoaders.papyrusFont.name
 		x: 20
 		y: 20
 		visible: false
@@ -104,6 +104,11 @@ Window {
 			id: bottomRect
 			anchors { verticalCenter: parent.bottom; horizontalCenter: parent.horizontalCenter }
 			text: "MergeSort"
+			onClicked: {
+				loader.setSource("sorting/MergeSort.qml")
+				backButton.visible = true
+				choiceRing.visible = false
+			}
 		}
 
 		SideRect {
@@ -150,4 +155,5 @@ Window {
 			onTextChanged: visible = true
 		}
 	}
+	onHeightChanged: print(width, height)
 }

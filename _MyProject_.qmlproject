@@ -10,7 +10,7 @@ Project {
 		directory: "."
 	}
 	JavaScriptFiles {
-		directory: ".scripts"
+		directory: "."
 	}
 	ImageFiles {
 		directory: "."

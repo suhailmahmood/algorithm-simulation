@@ -1,18 +1,15 @@
 import QtQuick 2.0
+import "../components"
 
 Rectangle {
 	id: tileWrapper
 	width: 50
 	height: 150
-
 	color: "transparent"
 
 	property alias tileColor: tile.color
-	property int tileSize: tile.height=30
+	property int tileSize: tile.height
 	property string tileLabel: ""
-	property variant webfont: FontLoader {
-		source: "../fonts/Papyrus.ttf"
-	}
 
 	Rectangle {
 		id: tile
@@ -27,7 +24,7 @@ Rectangle {
 			anchors.horizontalCenter: parent.horizontalCenter
 			anchors.top: parent.bottom
 			font {
-				family: webfont.name
+				family: FontLoaders.papyrusFont.name
 				pointSize: 18
 				bold: true
 			}

@@ -27,6 +27,15 @@ Rectangle {
 		tile2.pos = tempPos
 	}
 
+	function moveToPos(tileToMove, toPos, yChange) {
+		var x = tileAtPos(toPos).x
+		tileToMove.x = x
+		tileToMove.pos = toPos
+		if(yChange) {
+			tileToMove.y = yChange
+		}
+	}
+
 	Row {
 		id: tilesRow
 		anchors.horizontalCenter: parent.horizontalCenter
@@ -38,6 +47,7 @@ Rectangle {
 			delegate: Tile {
 				id: delegate
 				tileSize: modelData
+
 				property int pos: index
 
 				Behavior on x {
