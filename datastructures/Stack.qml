@@ -9,7 +9,7 @@ Rectangle {
 	property int limit: 10
 	property var items: []
 	property int count:1
-	property string compStr: "import QtQuick 2.3; Rectangle { id: comp; x: -100; y: 100; width: 100; height: 30; color: 'yellow';
+	property string compStr: "import QtQuick 2.3; Rectangle { id: comp; x: -100; y: -31; width: 100; height: 30; color: 'yellow';
 		Text { text:'"+count+"'; anchors.centerIn: parent }
 		SequentialAnimation { running: true
 		NumberAnimation {target: comp; property: 'x'; duration: 300; to: 1; easing.type: Easing.OutQuart}
@@ -21,7 +21,7 @@ Rectangle {
 	Rectangle {
 		id: stack
 		anchors.centerIn: parent
-		width: 102; height: 450
+		width: 102; height: 311
 		color: Qt.lighter("red")
 		border {
 			width: 1
@@ -29,8 +29,12 @@ Rectangle {
 		}
 
 		function push() {
-			if(count > limit)
-				print("StackOverflow!")
+			if(count > limit) {
+				stateText.text = "Stack Overflow!"
+				stateText.y = stack.y - 100
+				playStateText.start()
+				print(items[count-1].y)
+			}
 			else {
 				items[count] = Qt.createQmlObject(compStr, stack, "")
 				count++
@@ -39,7 +43,9 @@ Rectangle {
 
 		function pop() {
 			if(count === 1) {
-				print("Underflow")
+				stateText.text = "Stack Underflow!"
+				stateText.y = stack.y + stack.height + 30
+				playStateText.start()
 			}
 			else {
 				items[count-1].y -= 700
@@ -51,11 +57,28 @@ Rectangle {
 		Text {
 			id: tos
 			text: "TOS"
-			anchors.left: items[count-1].right
+			anchors.left: stack.right
 			anchors.verticalCenter: items[count-1].verticalCenter
 			Behavior on y {
 				NumberAnimation {duration: 400; easing.type: Easing.OutBounce}
 			}
+		}
+	}
+
+	Text {
+		id: stateText
+		text: ""
+		font.pointSize: 20
+		anchors.horizontalCenter: stack.horizontalCenter
+		y: stack.y - 100
+		opacity: 0.0
+
+		SequentialAnimation {
+			id: playStateText
+			running: false
+			NumberAnimation { target: stateText; property: "opacity"; to: 1; duration: 300 }
+			NumberAnimation { target: stateText; property: "opacity"; to: 1; duration: 2000 }
+			NumberAnimation { target: stateText; property: "opacity"; to: 0; duration: 1000 }
 		}
 	}
 

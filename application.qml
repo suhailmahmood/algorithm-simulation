@@ -6,9 +6,9 @@ import "components"
 Window {
 	id: mainWindow
 
-	width: 1150; height: 700
-	x: (Screen.desktopAvailableWidth - width) / 2
-	y: (Screen.desktopAvailableHeight - height) / 2
+	width: 1150; height: 650
+	x: visibility !== 4 ? (Screen.desktopAvailableWidth - width) / 2 : 0
+	y: visibility !== 4 ? (Screen.desktopAvailableHeight - height) / 2: 22
 	color: "#3C3C3C"
 	title: "Algorithm Simulator"
 
@@ -155,5 +155,4 @@ Window {
 			onTextChanged: visible = true
 		}
 	}
-	onHeightChanged: print(width, height)
 }

@@ -6,23 +6,24 @@ Rectangle {
 	id: root
 
 	width: 1200
-	height: 490	// change to 660 after testing
+	height: 660	// change to 660 after testing
 	color: "#f18912"
 
 	property int speed: 100
 	property alias tileCount: tilesRow.tileCount
 	property bool sorted: false
-	property bool debug: true
+	property bool debug
 
 	Rectangle {
 		id: mainArea
 		anchors.centerIn: parent
 		width: root.width
-		height: 350	// change to 450 after testing
+		height: 450	// change to 450 after testing
 		color: "transparent"
 
 		TilesWrapper {
 			id: tilesRow
+			anchors.verticalCenter: parent.verticalCenter
 			height: parent.height / 2
 			width: root.width - pseudoCode.width
 			anchors.bottom: mainArea.bottom
@@ -207,7 +208,7 @@ Rectangle {
 					for(p=0; p<tileCount; p++) {
 						temp = tilesRow.tileAtXY(p * 55, y)
 						temp.pos = p
-						temp.y += 130
+						temp.y += 150
 					}
 					currentLine = 2
 					break
@@ -258,7 +259,7 @@ Rectangle {
 					break
 
 				case 16:
-					tilesRow.moveToPos(tilesRow.tileAtPos(l), j, -130)
+					tilesRow.moveToPos(tilesRow.tileAtPos(l), j, -150)
 					currentLine = 17
 					break
 
@@ -272,7 +273,7 @@ Rectangle {
 					break
 
 				case 19:
-					tilesRow.moveToPos(tilesRow.tileAtPos(r), j, -130)
+					tilesRow.moveToPos(tilesRow.tileAtPos(r), j, -150)
 					currentLine = 20
 					break
 
