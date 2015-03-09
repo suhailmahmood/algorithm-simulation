@@ -28,9 +28,8 @@ Rectangle {
 	}
 
 	function moveToPos(tileToMove, toPos, yChange) {
-		var x = tileAtPos(toPos).x
-		tileToMove.x = x
-		tileToMove.pos = toPos
+		// 55 coz each tile is 50 pixel wide, & has spacing of 5
+		tileToMove.x = toPos * 55
 		if(yChange) {
 			tileToMove.y = yChange
 		}
@@ -63,6 +62,12 @@ Rectangle {
 					}
 				}
 			}
+		}
+	}
+
+	Component.onCompleted: {
+		for(var q = 0; q < tileCount; q++) {
+			print(repeater.itemAt(q).tileSize)
 		}
 	}
 }

@@ -6,10 +6,10 @@ Rectangle {
 	id: root
 
 	width: 1200
-	height: 660
+	height: 490	// change to 660 after testing
 	color: "#f18912"
 
-	property int speed: 500
+	property int speed: 100
 	property alias tileCount: tilesRow.tileCount
 	property bool sorted: false
 	property var bArray: []
@@ -19,12 +19,11 @@ Rectangle {
 		id: mainArea
 		anchors.centerIn: parent
 		width: root.width
-		height: 450
+		height: 350	// change to 450 after testing
 		color: "transparent"
 
 		TilesWrapper {
 			id: tilesRow
-//			color: "green"
 			height: parent.height / 2
 			width: root.width - pseudoCode.width
 			anchors.bottom: mainArea.bottom
@@ -63,7 +62,8 @@ Rectangle {
 				"}"
 			]
 		}
-
+//work with this array
+//		54,57,10,28,66,74,43
 		Text {
 			id: algoname
 			text: "Merge Sort"
@@ -145,13 +145,18 @@ Rectangle {
 			for(var k=0; k<tileCount; k++) {
 				aArray[k] = tilesRow.tileAtPos(k).tileSize
 			}
+//			for(k=0; k<tileCount; k++) {
+//				print(aArray[k])
+//			}
+//			print("")
+
 			//		delete after testing
 		}
 	}
 
 	Timer {
 		id: timer
-		interval: 500
+		interval: speed
 		repeat: true
 		property var leftElement
 		property var rightElement
@@ -164,7 +169,11 @@ Rectangle {
 		property int r
 		property int i
 		property int j
-		property bool mergeInnerInitial
+		property bool mergeSortInnerInitial
+		property bool mergeLoopInitial
+		property var positions: []
+		property int lElemArray
+		property int rElemArray
 
 		function reset() {
 			stop()
@@ -173,7 +182,7 @@ Rectangle {
 		}
 
 		onTriggered: {
-			print("\nCurrentLine", currentLine)
+			print("CurrentLine", currentLine)
 
 			if(tilesRow.dataArray.length !== 0) {
 				sorted = false
@@ -190,14 +199,13 @@ Rectangle {
 				case 2:
 					w = (w === 0) ? 1 : (2 * w)
 					currentLine = (w < tileCount) ? 4 : 7
-					mergeInnerInitial = true
+					mergeSortInnerInitial = true
 					break
 
 				case 4:
-					// end is non-zero after first run of the inner loop of MergeSort
-					if(mergeInnerInitial) {
+					if(mergeSortInnerInitial) {
 						i = 0
-						mergeInnerInitial = false
+						mergeSortInnerInitial = false
 					}
 					else {
 						i = i + 2 * w
@@ -205,84 +213,139 @@ Rectangle {
 
 					currentLine = (i < tileCount) ? 5 : 6
 					break
+
 				case 5:
 					currentLine = 10
 					break
+
+					// copy to initial array
 				case 6:
-					for(var p=0; p<tileCount; p++)
-						aArray[p] = bArray[p]
+					var temp, p
+//					for(p=0; p<tileCount; p++)
+//						print(positions[p])
+					print("")
+					for(p=0; p<tileCount; p++) {
+						temp = tilesRow.tileAtPos(positions[p])
+						temp.pos = positions[p]
+						temp.y += 130
+					}
+					for(p=0; p<tileCount; p++) {
+						print(tilesRow.tileAtPos(p).tileSize)
+					}
+
+//					for(p=0; p<tileCount; p++) {
+//						aArray[p] = bArray[p]
+//						print(aArray[p])
+//					}
 					currentLine = 2
 					break
+
 				case 7:
 					currentLine = 8
 					break
+
 				case 8:
 					sorted = true
 					stop()
 					currentLine = -1
+//					pseudoCode.highlightLine(-1)
 					break
+
 				case 10:
 					lStart = i
 					rStart = Math.min(i+w, tileCount)
 					end = Math.min(i+2*w, tileCount)
 					currentLine = 12
 					break
+
 				case 12:
 					l = lStart
 					r = rStart
 					currentLine = 13
+					mergeLoopInitial = true
 					break
+
 				case 13:
 					// run tests to verify that condition in 1st line holds
-					j = (l === lStart && r === rStart) ? l : j + 1
+					if(mergeLoopInitial) {
+						j = l
+						mergeLoopInitial = false
+					}
+					else {
+						j++
+					}
 					currentLine = (j < end) ? 15 : 21
 					break
+
 				case 15:
-					leftElement = aArray[l]
-					rightElement = aArray[r]
-					//					leftElement = tilesRow.tileAtPos(l)
-					//					rightElement = tilesRow.tileAtPos(r)
-					if(l < rStart && (r >= end || leftElement <= rightElement))
+
+//					leftElement.tileColor = "gray"
+//					rightElement.tileColor = "gray"
+					if(l < rStart && (r >= end || tilesRow.tileAtPos(l).tileSize <= tilesRow.tileAtPos(r).tileSize)) {
 						currentLine = 16
+					}
 					else
 						currentLine = 18
 					break
+
 				case 16:
-					bArray[j] = aArray[l]
-					// copy leftElement to WORK array at position j
+//					bArray[j] = aArray[l]
+					// copy tile at l to WORK array at position j
+					tilesRow.moveToPos(tilesRow.tileAtPos(l), j, -130)
+					positions[l] = j
+					print("Tile" , l, "moved to ", j, "positions[" + l + "]:", j)
 					currentLine = 17
 					break
+
 				case 17:
 					l++
+//					leftElement.tileColor = "green"
+//					rightElement.tileColor = "green"
 					currentLine = 13
 					break
+
 				case 18:
 					currentLine = 19
 					break
+
 				case 19:
-					bArray[j] = aArray[r]
-					// copy rightElement to WORK array at position j
+//					bArray[j] = aArray[r]
+					// copy tile at r to WORK array at position j
+					tilesRow.moveToPos(tilesRow.tileAtPos(r), j, -130)
+					positions[r] = j
+					print("Tile" , r, "moved to ", j, "positions[" + r + "]:", j)
 					currentLine = 20
 					break
+
 				case 20:
 					r++
+//					leftElement.tileColor = "green"
+//					rightElement.tileColor = "green"
 					currentLine = 13
 					break
+
 				case 21:
 					currentLine = 22
 					break
+
 				case 22:
 					currentLine = 4
 				}
 			}
-			print("w:", w, " i:", i)
-			print("LStart:", lStart, " RStart:", rStart, " End:", end)
-			print("L:", l, " R:", r, " j:", j)
+//			print("w:", w, " i:", i)
+//			print("LStart:", lStart, " RStart:", rStart, " End:", end)
+//			print("L:", l, " R:", r, " j:", j)
 		}
 	}
 	onSortedChanged: {
-		if(sorted)
-			for(var y=0; y<tileCount; y++)
-				print(aArray[y])
+//		print("\nSimpleArray")
+		if(sorted) {
+//			for(var y=0; y<tileCount; y++)
+//				print(aArray[y])
+			print("\nTiles:")
+			for(y=0; y<tileCount; y++)
+				print(tilesRow.tileAtPos(y).tileSize)
+		}
+		print("\n")
 	}
 }
