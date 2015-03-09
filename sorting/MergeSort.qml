@@ -12,8 +12,7 @@ Rectangle {
 	property int speed: 100
 	property alias tileCount: tilesRow.tileCount
 	property bool sorted: false
-	property var bArray: []
-	property var aArray: []
+	property bool debug: true
 
 	Rectangle {
 		id: mainArea
@@ -62,8 +61,7 @@ Rectangle {
 				"}"
 			]
 		}
-//work with this array
-//		54,57,10,28,66,74,43
+
 		Text {
 			id: algoname
 			text: "Merge Sort"
@@ -140,17 +138,6 @@ Rectangle {
 		onDataInputChanged: {
 			tilesRow.dataArray = drawer.dataInput
 			timer.reset()
-
-			//		delete after testing
-			for(var k=0; k<tileCount; k++) {
-				aArray[k] = tilesRow.tileAtPos(k).tileSize
-			}
-//			for(k=0; k<tileCount; k++) {
-//				print(aArray[k])
-//			}
-//			print("")
-
-			//		delete after testing
 		}
 	}
 
@@ -171,19 +158,15 @@ Rectangle {
 		property int j
 		property bool mergeSortInnerInitial
 		property bool mergeLoopInitial
-		property var positions: []
-		property int lElemArray
-		property int rElemArray
 
 		function reset() {
 			stop()
 			currentLine = w = lStart = rStart = end = l = r = i = j = 0
 			leftElement = rightElement = null
+			pseudoCode.highlightLine(-1)
 		}
 
 		onTriggered: {
-			print("CurrentLine", currentLine)
-
 			if(tilesRow.dataArray.length !== 0) {
 				sorted = false
 
@@ -218,25 +201,14 @@ Rectangle {
 					currentLine = 10
 					break
 
-					// copy to initial array
 				case 6:
-					var temp, p
-//					for(p=0; p<tileCount; p++)
-//						print(positions[p])
-					print("")
+					var y, p, temp
+					y = tilesRow.tileAtPos(0).y
 					for(p=0; p<tileCount; p++) {
-						temp = tilesRow.tileAtPos(positions[p])
-						temp.pos = positions[p]
+						temp = tilesRow.tileAtXY(p * 55, y)
+						temp.pos = p
 						temp.y += 130
 					}
-					for(p=0; p<tileCount; p++) {
-						print(tilesRow.tileAtPos(p).tileSize)
-					}
-
-//					for(p=0; p<tileCount; p++) {
-//						aArray[p] = bArray[p]
-//						print(aArray[p])
-//					}
 					currentLine = 2
 					break
 
@@ -248,13 +220,14 @@ Rectangle {
 					sorted = true
 					stop()
 					currentLine = -1
-//					pseudoCode.highlightLine(-1)
+					pseudoCode.highlightLine(-1)
 					break
 
 				case 10:
 					lStart = i
 					rStart = Math.min(i+w, tileCount)
 					end = Math.min(i+2*w, tileCount)
+					tilesRow.highlightTile(lStart, end-1)
 					currentLine = 12
 					break
 
@@ -266,7 +239,6 @@ Rectangle {
 					break
 
 				case 13:
-					// run tests to verify that condition in 1st line holds
 					if(mergeLoopInitial) {
 						j = l
 						mergeLoopInitial = false
@@ -278,9 +250,6 @@ Rectangle {
 					break
 
 				case 15:
-
-//					leftElement.tileColor = "gray"
-//					rightElement.tileColor = "gray"
 					if(l < rStart && (r >= end || tilesRow.tileAtPos(l).tileSize <= tilesRow.tileAtPos(r).tileSize)) {
 						currentLine = 16
 					}
@@ -289,18 +258,12 @@ Rectangle {
 					break
 
 				case 16:
-//					bArray[j] = aArray[l]
-					// copy tile at l to WORK array at position j
 					tilesRow.moveToPos(tilesRow.tileAtPos(l), j, -130)
-					positions[l] = j
-					print("Tile" , l, "moved to ", j, "positions[" + l + "]:", j)
 					currentLine = 17
 					break
 
 				case 17:
 					l++
-//					leftElement.tileColor = "green"
-//					rightElement.tileColor = "green"
 					currentLine = 13
 					break
 
@@ -309,18 +272,12 @@ Rectangle {
 					break
 
 				case 19:
-//					bArray[j] = aArray[r]
-					// copy tile at r to WORK array at position j
 					tilesRow.moveToPos(tilesRow.tileAtPos(r), j, -130)
-					positions[r] = j
-					print("Tile" , r, "moved to ", j, "positions[" + r + "]:", j)
 					currentLine = 20
 					break
 
 				case 20:
 					r++
-//					leftElement.tileColor = "green"
-//					rightElement.tileColor = "green"
 					currentLine = 13
 					break
 
@@ -330,22 +287,26 @@ Rectangle {
 
 				case 22:
 					currentLine = 4
+					tilesRow.highlightTile(-1)
+					break
+
+				default:
+					reset()
 				}
 			}
-//			print("w:", w, " i:", i)
-//			print("LStart:", lStart, " RStart:", rStart, " End:", end)
-//			print("L:", l, " R:", r, " j:", j)
+			if(debug) {
+				print("w:", w, " i:", i)
+				print("LStart:", lStart, " RStart:", rStart, " End:", end)
+				print("L:", l, " R:", r, " j:", j)
+			}
 		}
 	}
 	onSortedChanged: {
-//		print("\nSimpleArray")
-		if(sorted) {
-//			for(var y=0; y<tileCount; y++)
-//				print(aArray[y])
+		if(sorted && debug) {
 			print("\nTiles:")
 			for(y=0; y<tileCount; y++)
 				print(tilesRow.tileAtPos(y).tileSize)
+			print("\n")
 		}
-		print("\n")
 	}
 }

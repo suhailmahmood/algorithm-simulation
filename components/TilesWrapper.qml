@@ -18,6 +18,27 @@ Rectangle {
 		}
 	}
 
+	function tileAtXY(x, y) {
+		return tilesRow.childAt(x,y)
+	}
+
+	function highlightTile(begin, end, color) {
+		if(begin === -1) {
+			for(var i=0; i<tileCount; i++)
+				tileAtPos(i).tileColor = "green"
+			return
+		}
+		if(!color)
+			color = "gray"
+		for(i=0; i<tileCount; i++) {
+			if(i >= begin && i <= end) {
+				tileAtPos(i).tileColor = color
+			}
+			else
+				tileAtPos(i).tileColor = "green"
+		}
+	}
+
 	function swap(tile1, tile2) {
 		var tempX = tile1.x
 		var tempPos = tile1.pos
@@ -64,10 +85,5 @@ Rectangle {
 			}
 		}
 	}
-
-	Component.onCompleted: {
-		for(var q = 0; q < tileCount; q++) {
-			print(repeater.itemAt(q).tileSize)
-		}
-	}
+//	Component.onCompleted: print(tileAtXY(55, 0).tileSize)
 }
