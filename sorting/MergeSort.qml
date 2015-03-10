@@ -33,7 +33,6 @@ Rectangle {
 			id: pseudoCode
 			height: 450
 			width: 430
-			textSize: 10
 			anchors.right: mainArea.right
 			anchors.verticalCenter: parent.verticalCenter
 			pseudocode: [

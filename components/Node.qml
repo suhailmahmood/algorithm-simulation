@@ -3,14 +3,29 @@ import "../components"
 
 Rectangle {
 	id: node
-	width: dataField.width + pointer.width
-	height: 40
-
+	width: childrenRect.width
+	height: 30
+	color: "transparent"
+	opacity: 0
 	property int value: label.text=10
+
+	SequentialAnimation {
+		id: appearanceAnimation
+		running: true
+		NumberAnimation { target: node; property: "opacity"; from: 0; to: 1; duration: 600; easing.type: Easing.Linear }
+	}
+
+	Behavior on x {
+		NumberAnimation { duration: 400; easing.type: Easing.OutSine }
+	}
+
+	Behavior on y {
+		NumberAnimation { duration: 400; easing.type: Easing.OutSine}
+	}
 
 	Rectangle {
 		id: dataField
-		width: 90
+		width: 70
 		height: parent.height
 		color: "lightgreen"
 		radius: 3
@@ -29,7 +44,7 @@ Rectangle {
 
 	Rectangle {
 		id: pointer
-		width: 40
+		width: 25
 		height: parent.height
 		anchors.left: dataField.right
 		color: "lightpink"
@@ -39,7 +54,6 @@ Rectangle {
 			height: width
 			radius: width
 			anchors.centerIn: parent
-
 			color: "red"
 		}
 	}

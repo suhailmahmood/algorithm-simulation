@@ -6,9 +6,9 @@ import "components"
 Window {
 	id: mainWindow
 
-	width: 1150; height: 650
-	x: visibility !== 4 ? (Screen.desktopAvailableWidth - width) / 2 : 0
-	y: visibility !== 4 ? (Screen.desktopAvailableHeight - height) / 2: 22
+	width: 1150; height: 680
+	x: (Screen.desktopAvailableWidth - 1150) / 2
+	y: (Screen.desktopAvailableHeight - 650) / 2
 	color: "#3C3C3C"
 	title: "Algorithm Simulator"
 

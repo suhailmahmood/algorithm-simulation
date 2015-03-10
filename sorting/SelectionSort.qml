@@ -72,55 +72,82 @@ Rectangle {
 		}
 	}
 
-	Button {
-		id: start_pause
-		width: 130
-		height: 50
-		text: {
-			if(!timer.running)
-				return "Start"
-			else
-				return "Pause"
+//	MouseArea {
+//		id: controlPaneArea
+//		width: parent.width
+//		height: 20
+//		y: root.height - height
+//		hoverEnabled: true
+//		onEntered: controlPane.y = root.height - controlPane.height
+//		onExited: controlPane.y = root.height
+//	}
+
+	Rectangle {
+		id: controlPane
+		width: parent.width
+		height: 80
+		color: "#5c5454"
+		opacity: 0.8
+		y: root.height - height
+
+		Rectangle {
+			id: paneTopBorder
+			height: 1
+			width: parent.width
+			color: "#cfc0c0"
+			anchors.bottom: parent.top
 		}
-		fontFamily: FontLoaders.papyrusFont.name
-		boldText: true
-		textSize: 15
-		anchors.horizontalCenter: parent.horizontalCenter
-		y: root.height - 70
-		onClicked: {
-			if(!sorted && tilesRow.dataArray.length === 0) {
-				tilesRow.dataArray = Functions.getNRandom()
+
+		Button {
+			id: start_pause
+			width: 130
+			height: 50
+			text: {
+				if(!timer.running)
+					return "Start"
+				else
+					return "Pause"
+			}
+			fontFamily: FontLoaders.papyrusFont.name
+			boldText: true
+			textSize: 15
+			anchors.left: controlPane.horizontalCenter
+			anchors.verticalCenter: controlPane.verticalCenter
+			onClicked: {
+				if(!sorted && tilesRow.dataArray.length === 0) {
+					tilesRow.dataArray = Functions.getNRandom()
+					timer.start()
+				}
+				else {
+					timer.running ? timer.stop() : timer.start()
+				}
+			}
+		}
+
+		Button {
+			id: oneStep
+			width: 40
+			height: 50
+			text: "    1\nStep"
+			fontFamily: FontLoaders.papyrusFont.name
+			boldText: true
+			textSize: 10
+			anchors.left: start_pause.right
+			y: start_pause.y
+			onClicked: {
+				timer.repeat = false
 				timer.start()
 			}
-			else {
-				timer.running ? timer.stop() : timer.start()
+		}
+
+		Drawer {
+			id: drawer
+			anchors.top: controlPane.top
+			anchors.left: parent.left
+			onDataInputChanged: {
+				tilesRow.dataArray = drawer.dataInput
+				i = j = currentLine = min_loc = 0
 			}
-		}
-	}
-
-	Button {
-		id: oneStep
-		width: 40
-		height: 50
-		text: "    1\nStep"
-		fontFamily: FontLoaders.papyrusFont.name
-		boldText: true
-		textSize: 10
-		anchors.left: start_pause.right
-		y: start_pause.y
-		onClicked: {
-			timer.repeat = false
-			timer.start()
-		}
-	}
-
-	Drawer {
-		id: drawer
-		anchors.top: mainArea.bottom
-		anchors.left: parent.left
-		onDataInputChanged: {
-			tilesRow.dataArray = drawer.dataInput
-			i = j = currentLine = min_loc = 0
 		}
 	}
 

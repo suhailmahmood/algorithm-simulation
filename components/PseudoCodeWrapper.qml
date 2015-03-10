@@ -8,7 +8,6 @@ Rectangle {
 	radius: 8
 
 	property var pseudocode: ["this is sample", "pseudo-codes", "go here"]
-	property int textSize: codeLine.font.pointSize
 
 	function highlightLine(line) {
 		for(var i=0; i<repeater.count; i++) {
@@ -28,7 +27,6 @@ Rectangle {
 			id: repeater
 			model: pseudocode.length
 			delegate: Text {
-				id: codeLine
 				text: pseudocode[index]
 				font {
 					family: "consolas"
