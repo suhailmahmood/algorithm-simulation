@@ -8,12 +8,13 @@ Rectangle {
 
 	property int limit: 10
 	property var items: []
-	property int count:1
+	property int count
+	property int serial: 1
 	property string compStr: "import QtQuick 2.3; Rectangle { id: comp; x: -100; y: -31; width: 100; height: 30; color: 'yellow';
-		Text { text:'"+count+"'; anchors.centerIn: parent }
+		Text { text:'"+serial+"'; anchors.centerIn: parent }
 		SequentialAnimation { running: true
 		NumberAnimation {target: comp; property: 'x'; duration: 300; to: 1; easing.type: Easing.OutQuart}
-		NumberAnimation {target: comp; property: 'y'; duration: 800; to: stack.height - count*(height+1); easing.type: Easing.OutExpo}}
+		NumberAnimation {target: comp; property: 'y'; duration: 800; to: stack.height - (count+1)*(height+1); easing.type: Easing.OutExpo}}
 		Behavior on y { NumberAnimation {duration: 500; easing.type: Easing.InCirc} }
 		Behavior on opacity { NumberAnimation {duration: 500}}
 		}"
@@ -29,20 +30,21 @@ Rectangle {
 		}
 
 		function push() {
-			if(count > limit) {
+			if(count === limit) {
 				stateText.text = "Stack Overflow!"
 				stateText.y = stack.y - 100
 				playStateText.start()
-				print(items[count-1].y)
 			}
 			else {
 				items[count] = Qt.createQmlObject(compStr, stack, "")
 				count++
+				serial++
+				tosAnimation.start()
 			}
 		}
 
 		function pop() {
-			if(count === 1) {
+			if(count === 0) {
 				stateText.text = "Stack Underflow!"
 				stateText.y = stack.y + stack.height + 30
 				playStateText.start()
@@ -50,21 +52,33 @@ Rectangle {
 			else {
 				items[count-1].y -= 700
 				items[count-1].opacity = 0
+				tosAnimation.start()
 				count--
 			}
 		}
 
 		Text {
 			id: tos
-			text: "TOS"
+			text: "   TOS"
+			font {
+				family: FontLoaders.papyrusFont.name
+				pointSize: 13
+				bold: true
+			}
+			opacity: 0
+			smooth: true
 			anchors.left: stack.right
-			anchors.verticalCenter: items[count-1].verticalCenter
-			Behavior on y {
-				NumberAnimation {duration: 400; easing.type: Easing.OutBounce}
+			anchors.verticalCenter: count === 0 ? parent.bottom : items[count-1].verticalCenter
+			SequentialAnimation {
+				id: tosAnimation
+				NumberAnimation { target: tos; property: "opacity"; to: 0; duration: 0}
+				NumberAnimation { target: tos; property: "opacity"; to: 0; duration: 1000 }
+				NumberAnimation { target: tos; property: "opacity"; to: 1; duration: 600 }
 			}
 		}
 	}
 
+	onCountChanged: print(count)
 	Text {
 		id: stateText
 		text: ""
@@ -86,7 +100,6 @@ Rectangle {
 	Keys.onUpPressed: stack.pop()
 	Keys.onSpacePressed: stack.push()
 	Keys.onDeletePressed: stack.pop()
-
 
 	Button {
 		id: pushButton

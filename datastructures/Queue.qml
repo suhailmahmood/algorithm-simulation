@@ -21,7 +21,7 @@ Rectangle {
 	Rectangle {
 		id: queue
 		anchors.centerIn: parent
-		width: 450; height: 102
+		width: 311; height: 102
 		color: Qt.lighter("red")
 		border {
 			width: 1
