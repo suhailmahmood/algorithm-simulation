@@ -3,16 +3,18 @@ import "../components"
 
 Rectangle {
 	id: node
-	width: childrenRect.width
-	height: 30
+	objectName: "noe"
+	width: childrenRect.width; height: 30
 	color: "transparent"
 	opacity: 0
-	property int value: label.text=10
+	anchors.verticalCenter: parent.verticalCenter
 
-	SequentialAnimation {
+	property int value: label.text=10
+	property NumberAnimation appear: appearanceAnimation
+
+	NumberAnimation {
 		id: appearanceAnimation
-		running: true
-		NumberAnimation { target: node; property: "opacity"; from: 0; to: 1; duration: 600; easing.type: Easing.Linear }
+		target: node; property: "opacity"; from: 0; to: 1; duration: 600; easing.type: Easing.Linear
 	}
 
 	Behavior on x {
@@ -56,5 +58,11 @@ Rectangle {
 			anchors.centerIn: parent
 			color: "red"
 		}
+	}
+	Rectangle {
+		id: gap
+		width: 15
+		color: "transparent"
+		anchors.left: pointer.right
 	}
 }
