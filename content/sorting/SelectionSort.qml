@@ -1,6 +1,6 @@
 import QtQuick 2.0
-import "../components"
-import "../scripts/script.js" as Functions
+import "../../components"
+import "../../scripts/script.js" as Functions
 
 Rectangle {
 	id: root
@@ -71,16 +71,6 @@ Rectangle {
 			font.pointSize: 25
 		}
 	}
-
-//	MouseArea {
-//		id: controlPaneArea
-//		width: parent.width
-//		height: 20
-//		y: root.height - height
-//		hoverEnabled: true
-//		onEntered: controlPane.y = root.height - controlPane.height
-//		onExited: controlPane.y = root.height
-//	}
 
 	Rectangle {
 		id: controlPane

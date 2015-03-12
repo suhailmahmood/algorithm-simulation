@@ -1,6 +1,6 @@
 import QtQuick 2.3
-import "../components"
-import "../scripts/script.js" as Functions
+import "../../components"
+import "../../scripts/script.js" as Functions
 
 Rectangle {
 	id: root
@@ -10,8 +10,8 @@ Rectangle {
 	property var edges: []
 	property int count: nodes.length
 	property int currentIndex
-	property var node: Qt.createComponent("../components/Node.qml")
-	property var edge: Qt.createComponent("../components/Edge.qml")
+	property var node: Qt.createComponent("../../components/Node.qml")
+	property var edge: Qt.createComponent("../../components/Edge.qml")
 
 	Component.onCompleted: {
 		nodes[0] = node.createObject(root, { "x": 100, "y": root.height/2, "value": 10 })
@@ -191,7 +191,6 @@ Rectangle {
 			boldText: true
 			onClicked: {
 				currentIndex = 0
-				print("insert first")
 				insertTimer.start()
 			}
 		}
@@ -208,7 +207,6 @@ Rectangle {
 			anchors.left: insertFirst.right
 			onClicked: {
 				currentIndex = nodes.length
-				print("insert last")
 				insertTimer.start()
 			}
 		}

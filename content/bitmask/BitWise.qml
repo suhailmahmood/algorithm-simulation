@@ -1,7 +1,7 @@
 import QtQuick 2.4
 import QtQuick.Controls 1.3
 import QtQuick.Controls.Styles 1.3
-import "../components"
+import "../../components"
 
 Rectangle {
 	id: root
@@ -184,8 +184,6 @@ Rectangle {
 					color: nColor
 					Behavior on color {
 						ColorAnimation {
-							target: bit
-							property: "color"
 							duration: 400
 							easing.type: Easing.InOutQuad
 						}
@@ -211,14 +209,11 @@ Rectangle {
 				id: n2Repeater
 				model: 8
 				Rectangle {
-					id: bit
 					width: 50; height: 50
 					radius: 5
 					color: nColor
 					Behavior on color {
 						ColorAnimation {
-							target: bit
-							property: "color"
 							duration: 400
 							easing.type: Easing.InOutQuad
 						}
@@ -261,8 +256,6 @@ Rectangle {
 					color: resultColor
 					Behavior on color {
 						ColorAnimation {
-							target: bit
-							property: "color"
 							duration: 400
 							easing.type: Easing.InOutQuad
 						}

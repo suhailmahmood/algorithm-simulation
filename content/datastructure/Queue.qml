@@ -1,6 +1,6 @@
 import QtQuick 2.3
-import "../components"
-import "../scripts/script.js" as Functions
+import "../../components"
+import "../../scripts/script.js" as Functions
 
 Rectangle {
 	id: root
