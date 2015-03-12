@@ -14,15 +14,15 @@ Rectangle {
 
 	NumberAnimation {
 		id: appearanceAnimation
-		target: node; property: "opacity"; from: 0; to: 1; duration: 600; easing.type: Easing.Linear
+		target: node; property: "opacity"; from: 0; to: 1; duration: 400; easing.type: Easing.Linear
 	}
 
 	Behavior on x {
-		NumberAnimation { duration: 400; easing.type: Easing.OutSine }
+		NumberAnimation { duration: 400; easing.type: Easing.OutSine; alwaysRunToEnd: true }
 	}
 
 	Behavior on y {
-		NumberAnimation { duration: 400; easing.type: Easing.OutSine}
+		NumberAnimation { duration: 700; easing.type: Easing.InQuart}
 	}
 
 	Rectangle {

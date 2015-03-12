@@ -9,8 +9,9 @@ Rectangle {
 	property var nodes: []
 	property var edges: []
 	property int count: nodes.length
-	property int currentPos
+	property int currentIndex
 	property var node: Qt.createComponent("../components/Node.qml")
+	property var edge: Qt.createComponent("../components/Edge.qml")
 
 	Component.onCompleted: {
 		nodes[0] = node.createObject(root, { "x": 100, "y": root.height/2, "value": 10 })
@@ -42,42 +43,57 @@ Rectangle {
 		property int step
 		onTriggered: {
 			var temp
-			if(currentPos === nodes.length) {
-				temp = node.createObject(root, {'x':nodes[currentPos-1].x+nodes[0].width+40, 'y':nodes[0].y, 'value':Math.floor(Math.random()*100+1)})
-				temp.anchors.left = nodes[currentPos-1].right
-				nodes[currentPos] = temp
-				temp.appear.start()
-				stop()
-			}
-			else if(currentPos === 0) {
-				switch(step) {
-				case 0:
-					nodes[0].x += 110
-					step = 1
-					break
-				case 1:
-					temp = node.createObject(root, {'x':100, 'y':root.height/2, "value":Math.floor(Math.random()*100 + 1)})
-					nodes[0].anchors.left = temp.right
-					nodes.splice(0, 0, temp)
-					temp.appear.start()
-					step = 0
+			// insert first
+			if(currentIndex === 0) {
+
+				// list is empty
+				if(nodes.length === 0) {
+					nodes[0] = node.createObject(root, {'x':100, "value":Math.floor(Math.random()*100 + 1)})
+					nodes[0].appear.start()
 					stop()
-					break
 				}
+
+				// list is non-empty, so move current first node in x direction by 110, then insert
+				else {
+					switch(step) {
+					case 0:
+						nodes[0].x += 110
+						step = 1
+						break
+					case 1:
+						temp = node.createObject(root, {'x':100, "value":Math.floor(Math.random()*100 + 1)})
+						nodes[0].anchors.left = temp.right
+						temp.appear.start()
+						nodes.splice(0, 0, temp)
+						step = 0
+						stop()
+						break
+					}
+				}
+			}
+
+			// insert last, currentPos is not zero
+			else if(currentIndex === nodes.length) {
+				// using nodes[0] for default width value, y value
+				temp = node.createObject(root, {'value':Math.floor(Math.random()*100+1)})
+				temp.anchors.left = nodes[currentIndex-1].right
+				temp.appear.start()
+				nodes[currentIndex] = temp
+				stop()
 			}
 			else {
 				switch(step) {
 				case 0:
-					nodes[currentPos].anchors.left = undefined
-					nodes[currentPos].x += 110
+					nodes[currentIndex].anchors.left = undefined
+					nodes[currentIndex].x += 110
 					step = 1
 					break
 				case 1:
-					temp = node.createObject(root, {'x':nodes[currentPos-1], 'y':root.height/2, 'value':Math.floor(Math.random()*100+1)})
-					temp.anchors.left = nodes[currentPos-1].right
-					nodes[currentPos].anchors.left = temp.right
-					nodes.splice(currentPos, 0, temp)
+					temp = node.createObject(root, {'value':Math.floor(Math.random()*100+1)})
+					temp.anchors.left = nodes[currentIndex-1].right
+					nodes[currentIndex].anchors.left = temp.right
 					temp.appear.start()
+					nodes.splice(currentIndex, 0, temp)
 					step = 0
 					stop()
 					break
@@ -93,32 +109,67 @@ Rectangle {
 		triggeredOnStart: true
 		property int step
 		onTriggered: {
-			if(currentPos === nodes.length) {
-				nodes[currentPos-1].anchors.left = undefined
-				nodes[currentPos-1].anchors.verticalCenter = undefined
-				nodes[currentPos-1].y += 1000
-				nodes.splice(currentPos-1, 1)
-				step = -step+1
-				stop()
-			}
-			else if(currentPos === 0) {
-				if(step === 0) {
-					nodes[1].anchors.left = undefined
-					nodes[0].anchors.verticalCenter = undefined
-					nodes.splice(0,1)
-					step = 1
+			// remove first
+			if(currentIndex === 0) {
+				if(nodes.length === 0) {
+					stateText.text = "Linked List empty!"
+					playStateText.start()
+					stop()
 				}
 				else {
-					nodes[0].x -= 110
+					switch(step) {
+					case 0:
+						if(nodes.length > 1)
+							nodes[1].anchors.left = undefined
+
+						nodes[0].anchors.verticalCenter = undefined
+						nodes[0].y += 1000
+						nodes.splice(0,1)
+
+						if(nodes.length)
+							step = 1
+						else
+							stop()
+						break
+					case 1:
+						nodes[0].x -= 110
+						step = 0
+						stop()
+					}
+				}
+			}
+
+			// remove last
+			else if(currentIndex === nodes.length - 1 && step === 0) {
+				nodes[currentIndex].anchors.left = undefined
+				nodes[currentIndex].anchors.verticalCenter = undefined
+				nodes[currentIndex].y += 1000
+				nodes.splice(currentIndex, 1)
+				stop()
+			}
+
+			// remove node at currentIndex
+			else {
+				switch(step) {
+				case 0:
+					nodes[currentIndex].anchors.left = undefined
+					nodes[currentIndex].anchors.verticalCenter = undefined
+					nodes[currentIndex+1].anchors.left = undefined
+					nodes[currentIndex].y += 1000
+					step = 1
+					break
+				case 1:
+					nodes.splice(currentIndex, 1)
+					nodes[currentIndex].x -= 110
+					// now at currentIndex lies the node following the one deleted
+					step = 2
+					break
+				case 2:
+					nodes[currentIndex].anchors.left = nodes[currentIndex-1].right
 					step = 0
 					stop()
-					for(var i=0; i<nodes.length; i++)
-						print(nodes[i].value)
+					break
 				}
-
-			}
-			else {
-
 			}
 		}
 	}
@@ -126,7 +177,7 @@ Rectangle {
 	Rectangle {
 		id: insertButtons
 		width: childrenRect.width
-		height: 30
+		height: 25
 		anchors.horizontalCenter: parent.horizontalCenter
 
 		Button {
@@ -139,7 +190,8 @@ Rectangle {
 			fontFamily: FontLoaders.papyrusFont.name
 			boldText: true
 			onClicked: {
-				currentPos = 0
+				currentIndex = 0
+				print("insert first")
 				insertTimer.start()
 			}
 		}
@@ -155,7 +207,8 @@ Rectangle {
 			boldText: true
 			anchors.left: insertFirst.right
 			onClicked: {
-				currentPos = nodes.length
+				currentIndex = nodes.length
+				print("insert last")
 				insertTimer.start()
 			}
 		}
@@ -210,19 +263,21 @@ Rectangle {
 				text: "Go"
 				textSize: 10
 				onClicked: {
-					if(posInput.acceptableInput && posInput.text > 0) {
-						currentPos = posInput.text - 1
-						if(currentPos > nodes.length) {
-							stateText.text = "Can't reach a position of %1".arg(currentPos+1)
+					if(posInput.acceptableInput) {
+						if(posInput.text <= 0) {
+							stateText.text = "Invalid Input!"
 							playStateText.start()
 						}
 						else {
-							insertTimer.start()
+							currentIndex = posInput.text - 1
+							if(currentIndex > nodes.length) {
+								stateText.text = "Can't reach a position of %1".arg(currentIndex+1)
+								playStateText.start()
+							}
+							else {
+								insertTimer.start()
+							}
 						}
-					}
-					else {
-						stateText.text = "Invalid Input!"
-						playStateText.start()
 					}
 				}
 			}
@@ -232,7 +287,7 @@ Rectangle {
 	Rectangle {
 		id: removeButtons
 		width: childrenRect.width
-		height: 30
+		height: 25
 		anchors.horizontalCenter: parent.horizontalCenter
 		y: insertButtons.height
 
@@ -246,7 +301,7 @@ Rectangle {
 			fontFamily: FontLoaders.papyrusFont.name
 			boldText: true
 			onClicked: {
-				currentPos = 0
+				currentIndex = 0
 				removeTimer.start()
 			}
 		}
@@ -262,7 +317,7 @@ Rectangle {
 			boldText: true
 			anchors.left: removeFirst.right
 			onClicked: {
-				currentPos = nodes.length
+				currentIndex = nodes.length ? nodes.length - 1 : 0
 				removeTimer.start()
 			}
 		}
@@ -317,19 +372,21 @@ Rectangle {
 				text: "Go"
 				textSize: 10
 				onClicked: {
-					if(remPosInput.acceptableInput && remPosInput.text > 0) {
-						currentPos = remPosInput.text - 1
-						if(currentPos > nodes.length) {
-							stateText.text = "Can't reach a position of %1".arg(currentPos+1)
+					if(remPosInput.acceptableInput) {
+						if(remPosInput.text <= 0) {
+							stateText.text = "Invalid Input!"
 							playStateText.start()
 						}
 						else {
-							removeTimer.start()
+							currentIndex = remPosInput.text - 1
+							if(currentIndex > nodes.length - 1) {
+								stateText.text = "Can't reach a position of %1".arg(currentIndex+1)
+								playStateText.start()
+							}
+							else {
+								removeTimer.start()
+							}
 						}
-					}
-					else {
-						stateText.text = "Invalid Input!"
-						playStateText.start()
 					}
 				}
 			}

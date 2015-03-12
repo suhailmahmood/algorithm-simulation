@@ -1,6 +1,7 @@
 singleton FontLoaders fontLoaders.qml
 Button Button.qml
 Drawer Drawer.qml
+Edge Edge.qml
 Node Node.qml
 PlasticButton PlasticButton.qml
 PseudoCodeWrapper PseudoCodeWrapper.qml
