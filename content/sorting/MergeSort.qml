@@ -7,7 +7,7 @@ Rectangle {
 
 	width: 1200
 	height: 660
-	color: "#f18912"
+	color: "#e66e7c"
 
 	property int speed: 100
 	property alias tileCount: tilesRow.tileCount

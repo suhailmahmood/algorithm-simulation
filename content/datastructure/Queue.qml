@@ -5,6 +5,8 @@ import "../../scripts/script.js" as Functions
 Rectangle {
 	id: root
 	width: 640; height: 520
+	color: "#f2d2fb"
+
 	property int limit: 10
 	property var items: []
 	property int count:1
@@ -54,6 +56,17 @@ Rectangle {
 				}
 				count--
 			}
+		}
+	}
+
+	Text {
+		id: name
+		text: "Queue"
+		y: 50
+		anchors.horizontalCenter: parent.horizontalCenter
+		font {
+			family: FontLoaders.algerianFont.name
+			pointSize: 20
 		}
 	}
 

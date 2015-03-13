@@ -5,8 +5,7 @@ import "../../components"
 
 Rectangle {
 	id: root
-	width: 920
-	height: 640
+	color: "#8899d6ee"
 
 	property int speed: 800
 	property color nColor: "#caea97"
@@ -168,6 +167,7 @@ Rectangle {
 		id: mainArea
 		width: root.width
 		height: 480
+		color: "transparent"
 		y: buttonsRow.height * 2
 
 		Row {

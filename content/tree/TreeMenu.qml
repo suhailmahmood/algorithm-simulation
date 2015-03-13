@@ -1,18 +1,16 @@
 import QtQuick 2.3
-import QtQuick.Window 2.2
 import "../../components"
 
 Rectangle {
-	id: mainWindow
-
-	width: 1150; height: 680
+	id: root
+	width: parent.width; height: parent.height
 	color: "#3C3C3C"
 
 	Loader {
 		id: loader
 		anchors.fill: parent
 		anchors.horizontalCenter: parent.horizontalCenter
-		asynchronous: true			// causes loading and compilation to run on background thread, results in smoother animation, if any
+		asynchronous: true
 		visible: status === Loader.Ready
 	}
 
@@ -38,15 +36,15 @@ Rectangle {
 		id: choiceRing
 		anchors.centerIn: parent
 		width: 400; height: 250
-        radius: 30
+		radius: 30
 		color: "transparent"
 
 		SideRect {
 			id: leftRect
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.left }
-			text: "BubbleSort"
+			text: "Pre Order"
 			onClicked: {
-				loader.setSource("BubbleSort.qml")
+				loader.setSource("PreOrder.qml")
 				backButton.opacity = 1
 				choiceRing.visible = false
 			}
@@ -55,31 +53,9 @@ Rectangle {
 		SideRect {
 			id: rightRect
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.right }
-			text: "SelectionSort"
+			text: "In Order"
 			onClicked: {
-				loader.setSource("SelectionSort.qml")
-				backButton.opacity = 1
-				choiceRing.visible = false
-			}
-		}
-
-		SideRect {
-			id: topRect
-			anchors { verticalCenter: parent.top; horizontalCenter: parent.horizontalCenter }
-			text: "InsertionSort"
-			onClicked: {
-				loader.setSource("InsertionSort.qml")
-				backButton.opacity = 1
-				choiceRing.visible = false
-			}
-		}
-
-		SideRect {
-			id: bottomRect
-			anchors { verticalCenter: parent.bottom; horizontalCenter: parent.horizontalCenter }
-			text: "MergeSort"
-			onClicked: {
-				loader.setSource("MergeSort.qml")
+				loader.setSource("InOrder.qml")
 				backButton.opacity = 1
 				choiceRing.visible = false
 			}
@@ -88,7 +64,12 @@ Rectangle {
 		SideRect {
 			id: centerRect
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }
-			text: "QuickSort"
+			text: "Post Order"
+			onClicked: {
+				loader.setSource("PostOrder.qml")
+				backButton.opacity = 1
+				choiceRing.visible = false
+			}
 		}
 
 		Rectangle {

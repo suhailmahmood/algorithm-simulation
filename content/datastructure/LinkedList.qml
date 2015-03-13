@@ -5,6 +5,7 @@ import "../../scripts/script.js" as Functions
 Rectangle {
 	id: root
 	width: 720; height: 480
+	color: "#888972ee"
 
 	property var nodes: []
 	property var edges: []
@@ -16,6 +17,17 @@ Rectangle {
 	Component.onCompleted: {
 		nodes[0] = node.createObject(root, { "x": 100, "y": root.height/2, "value": 10 })
 		nodes[0].appear.start()
+	}
+
+	Text {
+		id: name
+		text: "Linked List"
+		y: removeButtons.y + removeButtons.height + 30
+		anchors.horizontalCenter: parent.horizontalCenter
+		font {
+			family: FontLoaders.algerianFont.name
+			pointSize: 17
+		}
 	}
 
 	Text {
@@ -178,6 +190,7 @@ Rectangle {
 		id: insertButtons
 		width: childrenRect.width
 		height: 25
+		color: "transparent"
 		anchors.horizontalCenter: parent.horizontalCenter
 
 		Button {
@@ -286,6 +299,7 @@ Rectangle {
 		id: removeButtons
 		width: childrenRect.width
 		height: 25
+		color: "transparent"
 		anchors.horizontalCenter: parent.horizontalCenter
 		y: insertButtons.height
 

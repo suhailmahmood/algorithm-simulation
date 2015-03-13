@@ -1,11 +1,9 @@
 import QtQuick 2.3
-import QtQuick.Window 2.2
 import "../../components"
 
 Rectangle {
-	id: mainWindow
-
-	width: 1150; height: 680
+	id: root
+	width: parent.width; height: parent.height
 	color: "#3C3C3C"
 
 	Loader {
@@ -44,9 +42,9 @@ Rectangle {
 		SideRect {
 			id: leftRect
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.left }
-			text: "BubbleSort"
+			text: "LinkedList"
 			onClicked: {
-				loader.setSource("BubbleSort.qml")
+				loader.setSource("LinkedList.qml")
 				backButton.opacity = 1
 				choiceRing.visible = false
 			}
@@ -55,31 +53,9 @@ Rectangle {
 		SideRect {
 			id: rightRect
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.right }
-			text: "SelectionSort"
+			text: "Stack"
 			onClicked: {
-				loader.setSource("SelectionSort.qml")
-				backButton.opacity = 1
-				choiceRing.visible = false
-			}
-		}
-
-		SideRect {
-			id: topRect
-			anchors { verticalCenter: parent.top; horizontalCenter: parent.horizontalCenter }
-			text: "InsertionSort"
-			onClicked: {
-				loader.setSource("InsertionSort.qml")
-				backButton.opacity = 1
-				choiceRing.visible = false
-			}
-		}
-
-		SideRect {
-			id: bottomRect
-			anchors { verticalCenter: parent.bottom; horizontalCenter: parent.horizontalCenter }
-			text: "MergeSort"
-			onClicked: {
-				loader.setSource("MergeSort.qml")
+				loader.setSource("Stack.qml")
 				backButton.opacity = 1
 				choiceRing.visible = false
 			}
@@ -88,7 +64,12 @@ Rectangle {
 		SideRect {
 			id: centerRect
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }
-			text: "QuickSort"
+			text: "Queue"
+			onClicked: {
+				loader.setSource("Queue.qml")
+				backButton.opacity = 1
+				choiceRing.visible = false
+			}
 		}
 
 		Rectangle {

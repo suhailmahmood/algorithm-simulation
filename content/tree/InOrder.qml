@@ -3,21 +3,21 @@ import "../../components"
 
 Rectangle {
 	id: root
-	width: 950
+	width: 1000
 	height: 640
-	color: "#f9d0e4"
+	color: "#c4e8f5"
 
 	property int speed: 600
 	property var vertices: canvas.vertices
-	property var yield: [3,4,1,9,7,8,5,6,2,0]
+	property var yield: [3,1,4,0,9,7,5,8,2,6]
 
 	VertexCanvas {
 		id: canvas
 	}
 
 	Text {
-		id: algoname
-		text: "Post-Order Traversal"
+		id: name
+		text: "In-Order Traversal"
 		anchors.bottom: pseudoCode.top
 		anchors.horizontalCenter: pseudoCode.horizontalCenter
 		font {
@@ -25,25 +25,24 @@ Rectangle {
 			pointSize: 17
 		}
 	}
-
 	PseudoCodeWrapper {
 		id: pseudoCode
 		height: 180
 		anchors.right: parent.right
 		anchors.verticalCenter: parent.verticalCenter
 		pseudocode: [
-			"1) visit left sub-tree in PostOrder",
-			"2) visit right sub-tree in PostOrder",
-			"3) visit root"
+			"1) visit left sub-tree in InOrder",
+			"2) visit root",
+			"3) visit right sub-tree in InOrder"
 		]
 	}
 	Text {
 		id: resultLabel
-		text: "PostOrder Traversal: "
+		text: "InOrder Traversal: "
 		opacity: 0
 		font.pointSize: 17
-		anchors.left: parent.left
-		y: parent.height - implicitHeight
+		x: vertices[3].x - 30
+		y: vertices[9].y + 80
 
 		SequentialAnimation {
 			running: true
@@ -57,7 +56,7 @@ Rectangle {
 	}
 
 	Button {
-		id: pauseButton
+		id: puaseButton
 		width: 100
 		height: 35
 		text: timer.running ? "Pause" : "Start"
@@ -69,7 +68,7 @@ Rectangle {
 		onClicked: {
 			if(timer.step === 0) {
 				timer.reset()
-				resultLabel.text = "PostOrder Traversal: "
+				resultLabel.text = "InOrder Traversal: "
 				canvas.selectVertex(-1)
 				timer.start()
 			}
@@ -90,7 +89,7 @@ Rectangle {
 		anchors.top: parent.top
 		onClicked: {
 			timer.reset()
-			resultLabel.text = "PostOrder Traversal: "
+			resultLabel.text = "InOrder Traversal: "
 			canvas.selectVertex(-1)
 			timer.start()
 		}
@@ -122,49 +121,50 @@ Rectangle {
 				resultLabel.text += vertices[3].label
 				break
 			case 4:
-				canvas.selectVertex(4, false)
-				break
-			case 5:
-				canvas.selectVertex(4, true)
-				resultLabel.text += ", " + vertices[4].label
-				break
-			case 6:
 				canvas.selectVertex(1, false)
 				break
-			case 7:
+			case 5:
 				canvas.selectVertex(1, true)
 				resultLabel.text += ", " + vertices[1].label
 				break
+			case 6:
+				canvas.selectVertex(4, false)
+				break
+			case 7:
+				canvas.selectVertex(4, true)
+				resultLabel.text += ", " + vertices[4].label
+				break
 			case 8:
 				pseudoCode.highlightLine(1)
-				canvas.selectVertex(2, false)
+				canvas.selectVertex(0, false)
 				break
 			case 9:
-				canvas.selectVertex(5, false)
+				canvas.selectVertex(0, true)
+				resultLabel.text += ", " + vertices[0].label
 				break
 			case 10:
-				canvas.selectVertex(7, false)
+				pseudoCode.highlightLine(2)
+				canvas.selectVertex(2, false)
 				break
 			case 11:
-				canvas.selectVertex(9, false)
+				canvas.selectVertex(5, false)
 				break
 			case 12:
+				canvas.selectVertex(7, false)
+				break
+			case 13:
+				canvas.selectVertex(9, false)
+				break
+			case 14:
 				canvas.selectVertex(9, true)
 				resultLabel.text += ", " + vertices[9].label
 				break
-			case 13:
+			case 15:
 				canvas.selectVertex(7, false)
 				break
-			case 14:
+			case 16:
 				canvas.selectVertex(7, true)
 				resultLabel.text += ", " + vertices[7].label
-				break
-			case 15:
-				canvas.selectVertex(8, false)
-				break
-			case 16:
-				canvas.selectVertex(8, true)
-				resultLabel.text += ", " + vertices[8].label
 				break
 			case 17:
 				canvas.selectVertex(5, false)
@@ -174,11 +174,11 @@ Rectangle {
 				resultLabel.text += ", " + vertices[5].label
 				break
 			case 19:
-				canvas.selectVertex(6, false)
+				canvas.selectVertex(8, false)
 				break
 			case 20:
-				canvas.selectVertex(6, true)
-				resultLabel.text += ", " + vertices[6].label
+				canvas.selectVertex(8, true)
+				resultLabel.text += ", " + vertices[8].label
 				break
 			case 21:
 				canvas.selectVertex(2, false)
@@ -188,17 +188,16 @@ Rectangle {
 				resultLabel.text += ", " + vertices[2].label
 				break
 			case 23:
-				pseudoCode.highlightLine(2)
-				canvas.selectVertex(0, false)
+				canvas.selectVertex(6, false)
 				break
 			case 24:
-				canvas.selectVertex(0, true)
-				resultLabel.text += ", " + vertices[0].label
+				canvas.selectVertex(6, true)
+				resultLabel.text += ", " + vertices[6].label
 				break
 			}
 			if(step === 24) {
-				pseudoCode.highlightLine(-1)
 				reset()
+				pseudoCode.highlightLine(-1)
 			}
 			else
 				step++

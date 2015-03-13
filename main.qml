@@ -37,7 +37,7 @@ ApplicationWindow {
 			MouseArea {
                 id: backmouse
                 anchors.fill: parent
-				anchors { leftMargin: -20; rightMargin: -110; topMargin: -20; bottomMargin: -20 }
+				anchors.margins: -20
                 onClicked: stackView.pop()
             }
         }
@@ -47,37 +47,37 @@ ApplicationWindow {
             Behavior on x { NumberAnimation{ easing.type: Easing.OutCubic} }
             x: backButton.x + backButton.width + 20
             anchors.verticalCenter: parent.verticalCenter
-            color: "white"
-			text: stackView.depth > 1 ? "Back" : "Algorithm Simulator"
+			color: "white"
+			text: "Algorithm Simulator"
         }
     }
 
     ListModel {
 		id: pageModel
-        ListElement {
-			title: "Sorting"
-			page: "content/sorting/SortMenu.qml"
-        }
-        ListElement {
+		ListElement {
 			title: "BitWise"
 			page: "content/bitmask/BitWise.qml"
-        }
-        ListElement {
-			title: "Graphs"
-			page: "content/graph/InOrder.qml"
-        }
-        ListElement {
+		}
+		ListElement {
 			title: "Data Structures"
-			page: "content/datastructure/Stack.qml"
-        }
+			page: "content/datastructure/DSMenu.qml"
+		}
+		ListElement {
+			title: "Graphs"
+			page: "content/graph/GraphMenu.qml"
+		}
+		ListElement {
+			title: "Sorting"
+			page: "content/sorting/SortMenu.qml"
+		}
         ListElement {
-            title: "TextInput"
-            page: "content/TextInputPage.qml"
-        }
-        ListElement {
-            title: "List"
-            page: "content/ListPage.qml"
-        }
+			title: "Tree Traversal"
+			page: "content/tree/TreeMenu.qml"
+		}
+		ListElement {
+			title: "About"
+			page: "content/about.qml"
+		}
     }
 
     StackView {

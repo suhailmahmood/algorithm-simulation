@@ -5,6 +5,7 @@ import "../../scripts/script.js" as Functions
 Rectangle {
 	id: root
 	width: 640; height: 520
+	color: "#d5f7ba"
 
 	property int limit: 10
 	property var items: []
@@ -92,6 +93,17 @@ Rectangle {
 			NumberAnimation { target: stateText; property: "opacity"; to: 1; duration: 300 }
 			NumberAnimation { target: stateText; property: "opacity"; to: 1; duration: 2000 }
 			NumberAnimation { target: stateText; property: "opacity"; to: 0; duration: 1000 }
+		}
+	}
+
+	Text {
+		id: name
+		text: "Stack"
+		x: stack.x - 180
+		anchors.verticalCenter: parent.verticalCenter
+		font {
+			family: FontLoaders.algerianFont.name
+			pointSize: 20
 		}
 	}
 
