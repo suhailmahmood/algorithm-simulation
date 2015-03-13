@@ -4,7 +4,7 @@ import "./components"
 
 ApplicationWindow {
     visible: true
-    width: 1000
+	width: 1200
 	height: 700
 
     Rectangle {
@@ -93,27 +93,6 @@ ApplicationWindow {
         initialItem: Item {
 			width: parent.width
 			height: parent.height
-
-//			GridView {
-//				width: parent.width / 1.5; height: parent.height
-//				model: pageModel
-//				anchors.centerIn: parent
-//				cellWidth: 256; cellHeight: 256
-
-//				delegate: Rectangle {
-//					width: 128; height: 128
-//					color: Qt.rgba(Math.random(), Math.random(), Math.random())
-//					radius: 10
-//					Text {
-//						anchors.centerIn: parent
-//						text: title
-//					}
-//					MouseArea {
-//						anchors.fill: parent
-//						onClicked: stackView.push(Qt.resolvedUrl(page))
-//					}
-//				}
-//			}
 
 			ListView {
 				width: parent.width
