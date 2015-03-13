@@ -1,32 +1,19 @@
 import QtQuick 2.3
 import QtQuick.Window 2.2
-import "content/sorting"
-import "components"
+import "../../components"
 
-Window {
+Rectangle {
 	id: mainWindow
 
 	width: 1150; height: 680
-	x: (Screen.desktopAvailableWidth - 1150) / 2
-	y: (Screen.desktopAvailableHeight - 650) / 2
 	color: "#3C3C3C"
-	title: "Algorithm Simulator"
-
-	MouseArea {
-		id: toggleVisibility
-		anchors.fill: parent
-		onDoubleClicked: {
-			// visibility is 2 for Windowed, and 5 for FullScreen
-			mainWindow.visibility = mainWindow.visibility === 5 ? "Windowed" : "FullScreen"
-		}
-	}
 
 	Loader {
 		id: loader
 		anchors.fill: parent
 		anchors.horizontalCenter: parent.horizontalCenter
 		asynchronous: true			// causes loading and compilation to run on background thread, results in smoother animation, if any
-		visible: status == Loader.Ready
+		visible: status === Loader.Ready
 	}
 
 	Button {
@@ -52,10 +39,10 @@ Window {
 		fontFamily: FontLoaders.papyrusFont.name
 		x: 20
 		y: 20
-		visible: false
+		opacity: 1
 		onClicked: {
 			loader.setSource("")
-			visible = false
+			opacity: 0
 			choiceRing.visible = true
 		}
 	}
@@ -72,8 +59,8 @@ Window {
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.left }
 			text: "BubbleSort"
 			onClicked: {
-				loader.setSource("content/sorting/BubbleSort.qml")
-				backButton.visible = true
+				loader.setSource("BubbleSort.qml")
+				backButton.opacity = 1
 				choiceRing.visible = false
 			}
 		}
@@ -83,8 +70,8 @@ Window {
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.right }
 			text: "SelectionSort"
 			onClicked: {
-				loader.setSource("content/sorting/SelectionSort.qml")
-				backButton.visible = true
+				loader.setSource("SelectionSort.qml")
+				backButton.opacity = 1
 				choiceRing.visible = false
 			}
 		}
@@ -94,8 +81,8 @@ Window {
 			anchors { verticalCenter: parent.top; horizontalCenter: parent.horizontalCenter }
 			text: "InsertionSort"
 			onClicked: {
-				loader.setSource("content/sorting/InsertionSort.qml")
-				backButton.visible = true
+				loader.setSource("InsertionSort.qml")
+				backButton.opacity = 1
 				choiceRing.visible = false
 			}
 		}
@@ -105,8 +92,8 @@ Window {
 			anchors { verticalCenter: parent.bottom; horizontalCenter: parent.horizontalCenter }
 			text: "MergeSort"
 			onClicked: {
-				loader.setSource("content/sorting/MergeSort.qml")
-				backButton.visible = true
+				loader.setSource("MergeSort.qml")
+				backButton.opacity = 1
 				choiceRing.visible = false
 			}
 		}

@@ -32,7 +32,6 @@ Rectangle {
 		onExited: {
 			label.visible = true
 		}
-
 		onClicked: myRect.clicked()
 	}
 }

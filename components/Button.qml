@@ -4,7 +4,6 @@ Rectangle {
 	id: root
 
 	color: normalColor
-	focus: true
 	border {
 		color: "lightgray"
 		width: 1

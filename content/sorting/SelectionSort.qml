@@ -9,7 +9,7 @@ Rectangle {
 	height: 360
 	color: "#f18912"
 
-	property int speed: 500 // speed as low as 50 still works
+	property int speed: slider.val // speed as low as 50 still works
 	property int i
 	property int j
 	property int min_loc: 0
@@ -131,6 +131,17 @@ Rectangle {
 			}
 		}
 
+		Slider {
+			id: slider
+			x: root.width - width - 10
+			width: 200
+			height: 30
+			maxVal: 2000
+			minVal: 0
+			step: 50
+			anchors.verticalCenter: parent.verticalCenter
+		}
+
 		Drawer {
 			id: drawer
 			anchors.top: controlPane.top
@@ -144,7 +155,7 @@ Rectangle {
 
 	Timer {
 		id: timer
-		interval: speed
+		interval: slider.val === 0 ? 500 : 2100 - slider.val
 		repeat: true
 		onTriggered: {
 			if(tilesRow.dataArray.length !== 0) {

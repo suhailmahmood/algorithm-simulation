@@ -6,7 +6,7 @@ Rectangle {
 	id: root
 
 	width: 1200
-	height: 660	// change to 660 after testing
+	height: 660
 	color: "#f18912"
 
 	property int speed: 100
@@ -18,7 +18,7 @@ Rectangle {
 		id: mainArea
 		anchors.centerIn: parent
 		width: root.width
-		height: 450	// change to 450 after testing
+		height: 450
 		color: "transparent"
 
 		TilesWrapper {
@@ -89,62 +89,90 @@ Rectangle {
 		}
 	}
 
-	Button {
-		id: start_pause
-		width: 130
-		height: 50
-		text: {
-			if(!timer.running)
-				return "Start"
-			else
-				return "Pause"
+	Rectangle {
+		id: controlPane
+		width: parent.width
+		height: 80
+		color: "#5c5454"
+		opacity: 0.8
+		y: root.height - height
+
+		Rectangle {
+			id: paneTopBorder
+			height: 1
+			width: parent.width
+			color: "#cfc0c0"
+			anchors.bottom: parent.top
 		}
-		fontFamily: FontLoaders.papyrusFont.name
-		boldText: true
-		textSize: 15
-		anchors.horizontalCenter: parent.horizontalCenter
-		y: root.height - 70
-		onClicked: {
-			if(!sorted && tilesRow.dataArray.length === 0) {
-				tilesRow.dataArray = Functions.getNRandom()
+
+		Button {
+			id: start_pause
+			width: 130
+			height: 50
+			text: {
+				if(!timer.running)
+					return "Start"
+				else
+					return "Pause"
+			}
+			fontFamily: FontLoaders.papyrusFont.name
+			boldText: true
+			textSize: 15
+			anchors.left: controlPane.horizontalCenter
+			anchors.verticalCenter: controlPane.verticalCenter
+			onClicked: {
+				if(!sorted && tilesRow.dataArray.length === 0) {
+					tilesRow.dataArray = Functions.getNRandom()
+					timer.start()
+				}
+				else {
+					timer.running ? timer.stop() : timer.start()
+				}
+				timer.repeat = true
+			}
+		}
+
+		Button {
+			id: oneStep
+			width: 40
+			height: 50
+			text: "    1\nStep"
+			fontFamily: FontLoaders.papyrusFont.name
+			boldText: true
+			textSize: 10
+			anchors.left: start_pause.right
+			y: start_pause.y
+			onClicked: {
+				timer.repeat = false
 				timer.start()
 			}
-			else {
-				timer.running ? timer.stop() : timer.start()
+		}
+
+		Slider {
+			id: slider
+			x: root.width - width - 10
+			width: 200
+			height: 30
+			maxVal: 2000
+			minVal: 0
+			step: 50
+			anchors.verticalCenter: parent.verticalCenter
+		}
+
+		Drawer {
+			id: drawer
+			anchors.top: controlPane.top
+			anchors.left: parent.left
+			onDataInputChanged: {
+				tilesRow.dataArray = drawer.dataInput
+				timer.reset()
 			}
-			timer.repeat = true
-		}
-	}
-
-	Button {
-		id: oneStep
-		width: 40
-		height: 50
-		text: "    1\nStep"
-		fontFamily: FontLoaders.papyrusFont.name
-		boldText: true
-		textSize: 10
-		anchors.left: start_pause.right
-		y: start_pause.y
-		onClicked: {
-			timer.repeat = false
-			timer.start()
-		}
-	}
-
-	Drawer {
-		id: drawer
-		anchors.top: mainArea.bottom
-		anchors.left: parent.left
-		onDataInputChanged: {
-			tilesRow.dataArray = drawer.dataInput
-			timer.reset()
 		}
 	}
 
 	Timer {
 		id: timer
-		interval: speed
+		interval: slider.val === 0 ? 500 : 2100 - slider.val
 		repeat: true
 		property var leftElement
 		property var rightElement
