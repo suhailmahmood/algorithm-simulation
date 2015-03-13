@@ -9,3 +9,5 @@ SideRect SideRect.qml
 Slider Slider.qml
 Tile Tile.qml
 TilesWrapper TilesWrapper.qml
+Vertex Vertex.qml
+VertexCanvas VertexCanvas.qml

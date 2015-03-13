@@ -1,6 +1,6 @@
 import QtQuick 2.3
 import QtQuick.Window 2.2
-import "sorting"
+import "content/sorting"
 import "components"
 
 Window {
@@ -72,7 +72,7 @@ Window {
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.left }
 			text: "BubbleSort"
 			onClicked: {
-				loader.setSource("sorting/BubbleSort.qml")
+				loader.setSource("content/sorting/BubbleSort.qml")
 				backButton.visible = true
 				choiceRing.visible = false
 			}
@@ -83,7 +83,7 @@ Window {
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.right }
 			text: "SelectionSort"
 			onClicked: {
-				loader.setSource("sorting/SelectionSort.qml")
+				loader.setSource("content/sorting/SelectionSort.qml")
 				backButton.visible = true
 				choiceRing.visible = false
 			}
@@ -94,7 +94,7 @@ Window {
 			anchors { verticalCenter: parent.top; horizontalCenter: parent.horizontalCenter }
 			text: "InsertionSort"
 			onClicked: {
-				loader.setSource("sorting/InsertionSort.qml")
+				loader.setSource("content/sorting/InsertionSort.qml")
 				backButton.visible = true
 				choiceRing.visible = false
 			}
@@ -105,7 +105,7 @@ Window {
 			anchors { verticalCenter: parent.bottom; horizontalCenter: parent.horizontalCenter }
 			text: "MergeSort"
 			onClicked: {
-				loader.setSource("sorting/MergeSort.qml")
+				loader.setSource("content/sorting/MergeSort.qml")
 				backButton.visible = true
 				choiceRing.visible = false
 			}
