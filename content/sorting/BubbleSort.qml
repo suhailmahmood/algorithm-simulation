@@ -89,6 +89,7 @@ Rectangle {
 		onClicked: {
 			if(!sorted && tilesRow.dataArray.length === 0) {
 				tilesRow.dataArray = Functions.getNRandom()
+				timer.repeat = true
 				timer.start()
 			}
 			else if(sorted && !timer.running) {
@@ -98,6 +99,7 @@ Rectangle {
 			}
 			else {
 				timer.running ? timer.stop() : timer.start()
+				timer.repeat = true
 			}
 		}
 	}
@@ -126,7 +128,7 @@ Rectangle {
 		property bool initial: true
 
 		function reset() {
-			initial = innerLoopBegin = true
+			initial = innerLoopBegin = repeat = true
 			sorted = false
 			i = j = 0
 		}

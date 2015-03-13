@@ -112,6 +112,7 @@ Rectangle {
 			else {
 				timer.running ? timer.stop() : timer.start()
 			}
+			timer.repeat = true
 		}
 	}
 

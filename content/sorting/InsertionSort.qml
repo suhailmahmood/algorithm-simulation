@@ -84,6 +84,7 @@ Rectangle {
 			else {
 				timer.running ? timer.stop() : timer.start()
 			}
+			timer.repeat = true
 		}
 	}
 
@@ -185,15 +186,3 @@ Rectangle {
 		}
 	}
 }
-
-
-
-
-
-//for(i=1; i<N; i++)
-//	j = i;
-//	temp = arr[i];
-//	while(j>0 && arr[j-1]>temp)
-//		arr[j] = arr[j-1];
-//		j--;
-//	arr[j] = temp;
