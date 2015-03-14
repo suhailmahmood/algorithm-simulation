@@ -6,8 +6,9 @@ import "../../components"
 Rectangle {
 	id: root
 	color: "#8899d6ee"
+	width: 920; height: 600
 
-	property int speed: 800
+	property int speed: 1200
 	property color nColor: "#caea97"
 	property color resultColor: "#89c030"
 	property var n1Bits: [0,0,0,0,0,0,0,0]
@@ -41,6 +42,38 @@ Rectangle {
 		}
 	}
 
+
+	Text {
+		id: n1Bit
+		x: buttonsRow.x + buttonsRow.width + 80
+		y: buttonsRow.height + 115
+		text: ""
+		font.pointSize: 13
+	}
+
+	Text {
+		id: n2Bit
+		x: buttonsRow.x + buttonsRow.width + 80
+		y: buttonsRow.height + 195
+		text: ""
+		font.pointSize: 13
+	}
+
+	Text {
+		id: output
+		text: ""
+		x: buttonsRow.x + buttonsRow.width + 215
+		y: buttonsRow.height + 150
+		font.pointSize: 15
+	}
+	Image {
+		id: gateImage
+		x: buttonsRow.x + buttonsRow.width + 80
+		y: buttonsRow.height + 120
+		source: ""
+		smooth: true
+	}
+
 	Timer {
 		id: timer
 		interval: speed
@@ -61,12 +94,15 @@ Rectangle {
 			stop()
 		}
 		onTriggered: {
+			n1Bit.text = n1Bits[7-i]
+			n2Bit.text = n2Bits[7-i]
 			switch(job) {
 			case "AND":
 				if(!step) {
 					temp = (n1 & n2)
 					step = 1
 				}
+				output.text = (temp & (1 << i)) ? 1 : 0
 				result = result | (temp & (1 << i))
 				n1Repeater.itemAt(7-i).color = n2Repeater.itemAt(7-i).color = Qt.darker(nColor)
 				resultRepeater.itemAt(7-i).color = Qt.darker(resultColor)
@@ -83,6 +119,7 @@ Rectangle {
 					temp = (n1 | n2)
 					step = 1
 				}
+				output.text = (temp & (1 << i)) ? 1 : 0
 				result = result | (temp & (1 << i))
 				n1Repeater.itemAt(7-i).color = n2Repeater.itemAt(7-i).color = Qt.darker(nColor)
 				resultRepeater.itemAt(7-i).color = Qt.darker(resultColor)
@@ -99,6 +136,7 @@ Rectangle {
 					temp = (n1 ^ n2)
 					step = 1
 				}
+				output.text = (temp & (1 << i)) ? 1 : 0
 				result = result | (temp & (1 << i))
 				n1Repeater.itemAt(7-i).color = n2Repeater.itemAt(7-i).color = Qt.darker(nColor)
 				resultRepeater.itemAt(7-i).color = Qt.darker(resultColor)
@@ -129,6 +167,7 @@ Rectangle {
 			textSize: 15
 			onClicked: {
 				timer.job = "AND"
+				gateImage.source = "../../images/andgate.png"
 				timer.reset()
 				timer.start()
 			}
@@ -143,6 +182,7 @@ Rectangle {
 			textSize: 15
 			onClicked: {
 				timer.job = "OR"
+				gateImage.source = "../../images/orgate.png"
 				timer.reset()
 				timer.start()
 			}
@@ -157,6 +197,7 @@ Rectangle {
 			textSize: 15
 			onClicked: {
 				timer.job = "XOR"
+				gateImage.source = "../../images/xorgate.png"
 				timer.reset()
 				timer.start()
 			}
@@ -287,11 +328,6 @@ Rectangle {
 					easing.type: Easing.InOutQuad
 				}
 			}
-		}
-
-		MouseArea {
-			anchors.fill: parent
-			onClicked: resultLabel.opacity = 1
 		}
 
 		Rectangle {
