@@ -6,6 +6,8 @@ ApplicationWindow {
     visible: true
 	width: 1200
 	height: 700
+	x: 40
+	y: 50
 
     Rectangle {
         color: "#212126"

@@ -9,6 +9,7 @@ Item {
 	signal clicked
 
 	Rectangle {
+		id: menuItem
 		anchors.fill: parent
 		color: "#11ffffff"
 		visible: mouse.pressed

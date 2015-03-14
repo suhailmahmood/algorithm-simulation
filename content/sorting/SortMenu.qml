@@ -89,6 +89,11 @@ Rectangle {
 			id: centerRect
 			anchors { verticalCenter: parent.verticalCenter; horizontalCenter: parent.horizontalCenter }
 			text: "QuickSort"
+			onClicked: {
+				loader.setSource("QuickSort.qml")
+				backButton.opacity = 1
+				choiceRing.visible = false
+			}
 		}
 
 		Rectangle {

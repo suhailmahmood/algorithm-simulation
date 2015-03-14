@@ -25,6 +25,7 @@ Rectangle {
 			pointSize: 17
 		}
 	}
+
 	PseudoCodeWrapper {
 		id: pseudoCode
 		height: 180
@@ -36,6 +37,7 @@ Rectangle {
 			"3) visit right sub-tree in InOrder"
 		]
 	}
+	
 	Text {
 		id: resultLabel
 		text: "InOrder Traversal: "
@@ -56,7 +58,7 @@ Rectangle {
 	}
 
 	Button {
-		id: puaseButton
+		id: pauseButton
 		width: 100
 		height: 35
 		text: timer.running ? "Pause" : "Start"
