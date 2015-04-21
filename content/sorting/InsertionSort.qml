@@ -71,7 +71,7 @@ Rectangle {
 
 	BottomPanel {
 		id: controlPanel
-		sliderMaxVal: 1900
+		sliderMaxVal: 1800
 		sliderMinVal: 0
 		sliderValue: 1500
 		sliderColor: root.color
