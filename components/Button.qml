@@ -12,10 +12,11 @@ Rectangle {
 	property color normalColor: "black"
 	property color hoverColor: "#777171"
 	property color pressedColor: Qt.darker(hoverColor)
-	property string text: buttonText.text= "Button"
-	property real textSize: buttonText.font.pointSize
-	property font fontFamily: buttonText.font.family
-	property bool boldText: buttonText.font.bold
+
+	property alias text: buttonText.text
+	property alias textSize: buttonText.font.pointSize
+	property alias fontFamily: buttonText.font.family
+	property alias boldText: buttonText.font.bold
 
 	signal clicked()
 
@@ -23,10 +24,6 @@ Rectangle {
 		id: buttonText
 		anchors.centerIn: parent
 		color: "white"
-		text: root.text
-		font.pointSize: root.textSize
-		font.family: root.fontFamily
-		font.bold: root.boldText
 	}
 
 	MouseArea {

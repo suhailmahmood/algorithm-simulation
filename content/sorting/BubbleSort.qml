@@ -1,15 +1,14 @@
-import QtQuick 2.0
+import QtQuick 2.4
 import "../../components"
 import "../../scripts/script.js" as Functions
 
 Rectangle {
 	id: root
 
-	width: mainArea.width
-	height: mainArea.height+60
+	width: 1200
+	height: 660
 	color: "#7185e8"
 
-	property int speed: 300	// minimum safe value is 120, more cause tiles to be misplaced
 	property int i
 	property int j
 	property alias tileCount: tilesRow.tileCount
@@ -21,19 +20,22 @@ Rectangle {
 	Rectangle {
 		id: mainArea
 		anchors.centerIn: parent
-		width: 892
-		height: 300
+		width: root.width
+		height: 450
 		color: "transparent"
 
 		TilesWrapper {
 			id: tilesRow
 			anchors.verticalCenter: parent.verticalCenter
+			height: parent.height / 2
+			width: root.width - pseudoCode.width
+			anchors.bottom: mainArea.bottom
 		}
 
 		PseudoCodeWrapper {
 			id: pseudoCode
 			height: 170
-			anchors.left: tilesRow.right
+			anchors.right: mainArea.right
 			anchors.verticalCenter: parent.verticalCenter
 			pseudocode: [
 				"for (i=1 to n-1)",
@@ -56,169 +58,85 @@ Rectangle {
 
 		Text {
 			id: ijValText
-			text: "n:" + tileCount + "  i:" + (i+1) + "  j:" + (j+1)
+			text: "n:" + tileCount + "  i:" + (i + 1) + "  j:" + (j + 1)
 			anchors.horizontalCenter: tilesRow.horizontalCenter
+			anchors.bottom: mainArea.top
 			font {
-				family: FontLoaders.papyrusFont.name
+				family: "consolas"
 				pointSize: 25
 			}
 		}
 	}
 
-	Rectangle {
-		id: controlPane
-		width: parent.width
-		height: 80
-		color: "#5c5454"
-		opacity: 0.8
-		y: root.height - height
-
-		Rectangle {
-			id: paneTopBorder
-			height: 1
-			width: parent.width
-			color: "#cfc0c0"
-			anchors.bottom: parent.top
-		}
-
-		Button {
-			id: start_pause
-			width: 130
-			height: 50
-			text: {
-				if(!timer.running)
-					return "Start"
-				else
-					return "Pause"
-			}
-			fontFamily: FontLoaders.papyrusFont.name
-			boldText: true
-			textSize: 15
-			anchors.left: controlPane.horizontalCenter
-			anchors.verticalCenter: controlPane.verticalCenter
-			onClicked: {
-				if(!sorted && tilesRow.dataArray.length === 0) {
-					tilesRow.dataArray = Functions.getNRandom()
-					timer.start()
-				}
-				else if(sorted && !timer.running) {
-					tilesRow.dataArray = Functions.getNRandom()
-					timer.reset()
-					timer.start()
-				}
-				else {
-					timer.running ? timer.stop() : timer.start()
-				}
-				timer.repeat = true
-			}
-		}
-
-		Button {
-			id: oneStep
-			width: 40
-			height: 50
-			text: "    1\nStep"
-			fontFamily: FontLoaders.papyrusFont.name
-			boldText: true
-			textSize: 10
-			anchors.left: start_pause.right
-			y: start_pause.y
-			onClicked: {
-				timer.repeat = false
-				timer.start()
-			}
-		}
-
-		Slider {
-			id: slider
-			x: root.width - width - 10
-			width: 200
-			height: 30
-			maxVal: 1900
-			minVal: 0
-			step: 50
-			anchors.verticalCenter: parent.verticalCenter
-		}
-
-		Drawer {
-			id: drawer
-			anchors.top: controlPane.top
-			anchors.left: parent.left
-			onDataInputChanged: {
-				tilesRow.dataArray = drawer.dataInput
-				timer.stop()
-				timer.reset()
-			}
-		}
+	BottomPanel {
+		id: controlPanel
+		sliderMaxVal: 1800
+		sliderMinVal: 0
+		sliderValue: 1500
+		sliderColor: root.color
 	}
 
 	Timer {
 		id: timer
-		interval: slider.val === 0 ? 500 : 2100 - slider.val
+		interval: controlPanel.sliderMaxVal - controlPanel.sliderValue + 200
 		repeat: true
 		property bool innerLoopBegin: true
 		property bool initial: true
 
 		function reset() {
+			stop()
 			initial = innerLoopBegin = repeat = true
 			sorted = false
-			i = j = 0
+			i = j = currentLine = 0
 		}
 
 		onTriggered: {
-			if(tilesRow.dataArray.length !== 0) {
+			if (tilesRow.dataArray.length !== 0) {
 				sorted = false
-
-				// BEGIN SORTING
 
 				pseudoCode.highlightLine(currentLine)
 
-				switch(currentLine) {
-				case(0):
-					if(i === tileCount-1) {
+				switch (currentLine) {
+				case (0):
+					if (i === tileCount - 1) {
 						stop()
 						initial = true
 						currentLine = -1
 						sorted = true
-					}
-					else {
-						i = initial ? i : i+1
+					} else {
+						i = initial ? i : i + 1
 						currentLine = 1
 					}
 					break
-
-				case(1):
-					if(!initial) {
+				case (1):
+					if (!initial) {
 						element1.tileColor = "green"
 						element2.tileColor = "green"
 					}
 					initial = false
 
 					j = innerLoopBegin ? 0 : j + 1
-					if(j === tileCount-i-1) {
+					if (j === tileCount - i - 1) {
 						currentLine = 0
 						innerLoopBegin = true
-					}
-					else {
+					} else {
 						currentLine = 2
 					}
 					break
-
-				case(2):
+				case (2):
 					element1 = tilesRow.tileAtPos(j)
-					element2 = tilesRow.tileAtPos(j+1)
+					element2 = tilesRow.tileAtPos(j + 1)
 					element1.tileColor = "gray"
 					element2.tileColor = "gray"
 					innerLoopBegin = false
 
 					if (element1.tileSize > element2.tileSize) {
 						currentLine = 3
-					}
-					else {
+					} else {
 						currentLine = 1
 					}
 					break
-				case(3):
+				case (3):
 					tilesRow.swap(element1, element2)
 					currentLine = 1
 					break

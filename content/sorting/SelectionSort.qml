@@ -5,11 +5,10 @@ import "../../scripts/script.js" as Functions
 Rectangle {
 	id: root
 
-	width: 892
-	height: 360
+	width: 1200
+	height: 660
 	color: "#f18912"
 
-	property int speed: slider.val // speed as low as 50 still works
 	property int i
 	property int j
 	property int min_loc: 0
@@ -22,20 +21,23 @@ Rectangle {
 	Rectangle {
 		id: mainArea
 		anchors.centerIn: parent
-		width: 892
-		height: 300
+		width: root.width
+		height: 450
 		color: "transparent"
 
 		TilesWrapper {
 			id: tilesRow
 			anchors.verticalCenter: parent.verticalCenter
+			height: parent.height / 2
+			width: root.width - pseudoCode.width
+			anchors.bottom: mainArea.bottom
 		}
 
 
 		PseudoCodeWrapper {
 			id: pseudoCode
 			height: 270
-			anchors.left: tilesRow.right
+			anchors.right: mainArea.right
 			anchors.verticalCenter: parent.verticalCenter
 			pseudocode: [
 				"for (i=0 to n-2)",
@@ -67,96 +69,30 @@ Rectangle {
 			id: minLocText
 			text: "i:" + i + "  j: " + j + "   min_loc:" + min_loc
 			anchors.horizontalCenter: tilesRow.horizontalCenter
+			anchors.bottom: mainArea.top
 			font.family: "consolas"
 			font.pointSize: 25
 		}
 	}
 
-	Rectangle {
-		id: controlPane
-		width: parent.width
-		height: 80
-		color: "#5c5454"
-		opacity: 0.8
-		y: root.height - height
-
-		Rectangle {
-			id: paneTopBorder
-			height: 1
-			width: parent.width
-			color: "#cfc0c0"
-			anchors.bottom: parent.top
-		}
-
-		Button {
-			id: start_pause
-			width: 130
-			height: 50
-			text: {
-				if(!timer.running)
-					return "Start"
-				else
-					return "Pause"
-			}
-			fontFamily: FontLoaders.papyrusFont.name
-			boldText: true
-			textSize: 15
-			anchors.left: controlPane.horizontalCenter
-			anchors.verticalCenter: controlPane.verticalCenter
-			onClicked: {
-				if(!sorted && tilesRow.dataArray.length === 0) {
-					tilesRow.dataArray = Functions.getNRandom()
-					timer.start()
-				}
-				else {
-					timer.running ? timer.stop() : timer.start()
-				}
-				timer.repeat = true
-			}
-		}
-
-		Button {
-			id: oneStep
-			width: 40
-			height: 50
-			text: "    1\nStep"
-			fontFamily: FontLoaders.papyrusFont.name
-			boldText: true
-			textSize: 10
-			anchors.left: start_pause.right
-			y: start_pause.y
-			onClicked: {
-				timer.repeat = false
-				timer.start()
-			}
-		}
-
-		Slider {
-			id: slider
-			x: root.width - width - 10
-			width: 200
-			height: 30
-			maxVal: 2000
-			minVal: 0
-			step: 50
-			anchors.verticalCenter: parent.verticalCenter
-		}
-
-		Drawer {
-			id: drawer
-			anchors.top: controlPane.top
-			anchors.left: parent.left
-			onDataInputChanged: {
-				tilesRow.dataArray = drawer.dataInput
-				i = j = currentLine = min_loc = 0
-			}
-		}
+	BottomPanel {
+		id: controlPanel
+		sliderMaxVal: 2000
+		sliderMinVal: 0
+		sliderValue: 1500
+		sliderColor: root.color
 	}
 
 	Timer {
 		id: timer
-		interval: slider.val === 0 ? 500 : 2100 - slider.val
+		interval: controlPanel.sliderMaxVal - controlPanel.sliderValue + 100
 		repeat: true
+
+		function reset() {
+			stop()
+			i = j = currentLine = min_loc = 0
+		}
+
 		onTriggered: {
 			if(tilesRow.dataArray.length !== 0) {
 				sorted = false

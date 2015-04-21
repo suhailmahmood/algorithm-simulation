@@ -9,7 +9,6 @@ Rectangle {
 	height: 660
 	color: "#e66e7c"
 
-	property int speed: 100
 	property alias tileCount: tilesRow.tileCount
 	property bool sorted: false
 	property bool debug
@@ -77,7 +76,7 @@ Rectangle {
 			id: helpText
 			text: {
 				if(timer.currentLine < 10)
-					return "w: " + timer.w + "\ni: " + timer.i
+					return "w: " + timer.w + "   i: " + timer.i
 				else
 					return "LStart:" + timer.lStart +" RStart:" + timer.rStart + " End:" + timer.end +
 							"\nL:" + timer.l + " R:" + timer.r + " j:" + timer.j
@@ -89,90 +88,17 @@ Rectangle {
 		}
 	}
 
-	Rectangle {
-		id: controlPane
-		width: parent.width
-		height: 80
-		color: "#5c5454"
-		opacity: 0.8
-		y: root.height - height
-
-		Rectangle {
-			id: paneTopBorder
-			height: 1
-			width: parent.width
-			color: "#cfc0c0"
-			anchors.bottom: parent.top
-		}
-
-		Button {
-			id: start_pause
-			width: 130
-			height: 50
-			text: {
-				if(!timer.running)
-					return "Start"
-				else
-					return "Pause"
-			}
-			fontFamily: FontLoaders.papyrusFont.name
-			boldText: true
-			textSize: 15
-			anchors.left: controlPane.horizontalCenter
-			anchors.verticalCenter: controlPane.verticalCenter
-			onClicked: {
-				if(!sorted && tilesRow.dataArray.length === 0) {
-					tilesRow.dataArray = Functions.getNRandom()
-					timer.start()
-				}
-				else {
-					timer.running ? timer.stop() : timer.start()
-				}
-				timer.repeat = true
-			}
-		}
-
-		Button {
-			id: oneStep
-			width: 40
-			height: 50
-			text: "    1\nStep"
-			fontFamily: FontLoaders.papyrusFont.name
-			boldText: true
-			textSize: 10
-			anchors.left: start_pause.right
-			y: start_pause.y
-			onClicked: {
-				timer.repeat = false
-				timer.start()
-			}
-		}
-
-		Slider {
-			id: slider
-			x: root.width - width - 10
-			width: 200
-			height: 30
-			maxVal: 2000
-			minVal: 0
-			step: 50
-			anchors.verticalCenter: parent.verticalCenter
-		}
-
-		Drawer {
-			id: drawer
-			anchors.top: controlPane.top
-			anchors.left: parent.left
-			onDataInputChanged: {
-				tilesRow.dataArray = drawer.dataInput
-				timer.reset()
-			}
-		}
+	BottomPanel {
+		id: controlPanel
+		sliderMaxVal: 2000
+		sliderMinVal: 0
+		sliderValue: 1500
+		sliderColor: root.color
 	}
 
 	Timer {
 		id: timer
-		interval: slider.val === 0 ? 500 : 2100 - slider.val
+		interval: controlPanel.sliderMaxVal - controlPanel.sliderValue + 100
 		repeat: true
 		property var leftElement
 		property var rightElement
@@ -198,8 +124,6 @@ Rectangle {
 		onTriggered: {
 			if(tilesRow.dataArray.length !== 0) {
 				sorted = false
-
-				// BEGIN SORTING
 
 				pseudoCode.highlightLine(currentLine)
 

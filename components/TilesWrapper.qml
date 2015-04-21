@@ -85,5 +85,4 @@ Rectangle {
 			}
 		}
 	}
-//	Component.onCompleted: print(tileAtXY(55, 0).tileSize)
 }
