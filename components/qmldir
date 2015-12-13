@@ -1,0 +1,13 @@
+singleton FontLoaders fontLoaders.qml
+Button Button.qml
+Drawer Drawer.qml
+Edge Edge.qml
+MenuDelegate MenuDelegate.qml
+Node Node.qml
+PseudoCodeWrapper PseudoCodeWrapper.qml
+SideRect SideRect.qml
+Slider Slider.qml
+Tile Tile.qml
+TilesWrapper TilesWrapper.qml
+Vertex Vertex.qml
+VertexCanvas VertexCanvas.qml
